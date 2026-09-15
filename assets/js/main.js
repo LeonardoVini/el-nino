@@ -88,7 +88,7 @@ function ligarRevelacao() {
 
   /**
    * Uma rolagem muito rápida pode levar um elemento de baixo da dobra para
-   * cima dela entre dois cálculos do observador — que então nunca reporta
+   * cima dela entre dois cálculos do observador, que então nunca reporta
    * interseção e o bloco fica invisível. Esta varredura, que só percorre o
    * que ainda falta revelar, fecha essa brecha.
    */
@@ -126,35 +126,138 @@ function ligarEtapas() {
 }
 
 /* =========================================================================
- * Controles de fase
+ * Simulador: um controle contínuo que dirige a cena e projeta o efeito
  * ====================================================================== */
 
-const VALOR_FASE = { nina: -1, neutro: 0, nino: 1 };
+/** ONI de ±2,0 °C corresponde à fase cheia da cena 3D. */
+const ONI_CHEIO = 2;
+
+/**
+ * Ponte entre o simulador e a cena 3D. Começa como nada: o slider e a projeção
+ * por região funcionam sozinhos, e a cena se pendura aqui quando termina de
+ * carregar. Sem WebGL, o resto do simulador continua de pé.
+ */
+let aplicarFaseNaCena = () => {};
+let oniCorrente = 0;
 
 const TEXTO_FASE = {
   nina:
-    'La Niña: os alísios sopram ainda mais forte, a termoclina fica quase encostada na ' +
-    'superfície no leste e a ressurgência traz água fria com força total. A chuva se ' +
-    'concentra sobre a Indonésia.',
+    'Os alísios sopram ainda mais forte, a termoclina fica quase encostada na superfície ' +
+    'no leste e a ressurgência traz água fria com força total. A chuva se concentra sobre ' +
+    'a Indonésia e falta no centro do oceano.',
   neutro:
     'Estado neutro: os alísios sopram firme para oeste e a termoclina fica bem inclinada, ' +
     'rasa no leste e profunda no oeste.',
   nino:
-    'El Niño: os alísios afrouxam e chegam a inverter no oeste, a termoclina se nivela, ' +
-    'a ressurgência desliga e a convecção se muda para o meio do Pacífico — com ar ' +
-    'descendo sobre a Indonésia e sobre o norte da América do Sul.',
+    'Os alísios afrouxam e chegam a inverter no oeste, a termoclina se nivela, a ' +
+    'ressurgência desliga e a convecção se muda para o meio do Pacífico, com ar descendo ' +
+    'sobre a Indonésia e sobre o norte da América do Sul.',
 };
 
-function ligarFases(grupo, aplicar, legenda) {
-  const botoes = $$('button', grupo);
-  botoes.forEach((b) => {
-    b.addEventListener('click', () => {
-      botoes.forEach((o) => o.setAttribute('aria-pressed', String(o === b)));
-      const fase = b.dataset.fase;
-      aplicar(VALOR_FASE[fase]);
-      if (legenda) legenda.textContent = TEXTO_FASE[fase];
-    });
+const NUANCE = {
+  fraco: 'O sinal já existe, mas é sutil e outros fatores podem encobri-lo. ',
+  moderado: '',
+  forte: '',
+  'muito forte': 'Nesta faixa o evento entra no grupo dos mais intensos já medidos. ',
+};
+
+function rotuloEvento(oni) {
+  const { fase, intensidade } = dados.classificarONI(oni);
+  if (fase === 'neutro') return 'Neutro';
+  const nome = fase === 'nino' ? 'El Niño' : 'La Niña';
+  const grau = fase === 'nina' && intensidade !== 'muito forte'
+    ? intensidade.replace('fraco', 'fraca').replace('moderado', 'moderada')
+    : intensidade;
+  return `${nome} ${grau}`;
+}
+
+/** Monta as linhas de projeção por região e devolve a função que as atualiza. */
+function montarProjecao() {
+  const destino = $('#projecao-regioes');
+  const linhas = dados.ordemRegioes.map((chave) => {
+    const r = dados.regioesBrasil[chave];
+    const linha = elemento('div', 'prev', destino);
+
+    const nome = elemento('div', 'prev__nome', linha);
+    elemento('span', null, nome, r.nome);
+    if (r.confianca === 'baixa') {
+      const aviso = elemento('span', 'prev__ressalva', nome, 'sinal fraco');
+      aviso.title = 'Nesta região o desvio de chuva varia muito de evento para evento.';
+    }
+
+    const trilha = elemento('div', 'prev__trilha', linha);
+    elemento('span', 'prev__eixo', trilha);
+    const barra = elemento('span', 'prev__barra', trilha);
+
+    const chuva = elemento('div', 'prev__chuva', linha);
+    const temp = elemento('div', 'prev__temp', linha);
+    return { chave, regiao: r, barra, chuva, temp, linha };
   });
+
+  const LIMITE = 70; // a trilha vai de -70% a +70% de desvio de chuva
+
+  return function atualizar(oni) {
+    for (const l of linhas) {
+      const p = dados.projetarRegiao(l.regiao, oni);
+      const seco = p.chuva < 0;
+      const largura = Math.min(50, (Math.abs(p.chuva) / LIMITE) * 50);
+
+      l.barra.style.width = `${largura}%`;
+      l.barra.style.left = seco ? `${50 - largura}%` : '50%';
+      l.barra.style.background = p.neutro
+        ? 'var(--neutral)'
+        : seco ? 'var(--warm)' : 'var(--cool)';
+      l.barra.style.opacity = p.neutro ? '0.35' : '1';
+
+      l.chuva.textContent = p.neutro ? 'sem sinal' : `${comSinal(p.chuva, 0)}% de chuva`;
+      l.chuva.dataset.tom = p.neutro ? 'neutro' : seco ? 'seca' : 'chuva';
+      l.temp.textContent = p.neutro ? '' : `${comSinal(p.temperatura, 1)} °C`;
+      l.linha.setAttribute(
+        'aria-label',
+        p.neutro
+          ? `${l.regiao.nome}: sem sinal claro`
+          : `${l.regiao.nome}: ${comSinal(p.chuva, 0)} por cento de chuva e ` +
+            `${comSinal(p.temperatura, 1)} grau na temperatura`
+      );
+    }
+  };
+}
+
+function ligarSimulador() {
+  const controle = $('#controle-oni');
+  const valor = $('#valor-oni');
+  const classe = $('#classe-oni');
+  const legenda = $('#legenda-pacifico');
+  const atalhos = $$('#atalhos-oni button');
+  const atualizarProjecao = montarProjecao();
+
+  function aplicar(oni, origem) {
+    valor.textContent = `${comSinal(oni, 1)} °C`;
+    const { fase, intensidade } = dados.classificarONI(oni);
+    classe.textContent = rotuloEvento(oni);
+    classe.className = `etiqueta ${
+      fase === 'nino' ? 'etiqueta--seca' : fase === 'nina' ? 'etiqueta--chuva' : 'etiqueta--misto'
+    }`;
+    legenda.textContent = fase === 'neutro'
+      ? TEXTO_FASE.neutro
+      : (NUANCE[intensidade] ?? '') + TEXTO_FASE[fase];
+
+    oniCorrente = oni;
+    aplicarFaseNaCena(Math.max(-1, Math.min(1, oni / ONI_CHEIO)));
+    atualizarProjecao(oni);
+
+    for (const b of atalhos) {
+      b.setAttribute('aria-pressed', String(Number(b.dataset.oni) === oni));
+    }
+    if (origem !== 'controle') controle.value = String(oni);
+  }
+
+  controle.addEventListener('input', () => aplicar(Number(controle.value), 'controle'));
+  for (const b of atalhos) {
+    b.addEventListener('click', () => aplicar(Number(b.dataset.oni), 'atalho'));
+  }
+
+  aplicar(Number(controle.value), 'inicial');
 }
 
 /* =========================================================================
@@ -269,6 +372,97 @@ function montarReferencias() {
     a.rel = 'noopener';
     a.target = '_blank';
   }
+}
+
+/* =========================================================================
+ * Quiz
+ * ====================================================================== */
+
+function montarQuiz() {
+  const lista = $('#quiz-lista');
+  const placar = $('#quiz-placar');
+  if (!lista) return;
+
+  const total = dados.perguntasQuiz.length;
+  let respondidas = 0;
+  let acertos = 0;
+
+  function atualizarPlacar() {
+    if (respondidas < total) {
+      placar.hidden = true;
+      return;
+    }
+    placar.hidden = false;
+    placar.textContent = '';
+    const nota = elemento('strong', 'quiz__nota', placar, `${acertos} de ${total}`);
+    nota.dataset.tom = acertos === total ? 'cheio' : acertos >= total * 0.6 ? 'bom' : 'parcial';
+    const recado =
+      acertos === total
+        ? 'Gabarito completo. Você entendeu o mecanismo, não só decorou os efeitos.'
+        : acertos >= total * 0.6
+          ? 'Boa base. Vale reler o capítulo sobre como o fenômeno se forma.'
+          : 'Sem problema: role de volta ao corte do Pacífico e refaça o percurso.';
+    elemento('span', 'quiz__recado', placar, recado);
+    const refazer = elemento('button', 'botao', placar, 'Refazer o quiz');
+    refazer.type = 'button';
+    refazer.addEventListener('click', () => {
+      lista.textContent = '';
+      placar.hidden = true;
+      respondidas = 0;
+      acertos = 0;
+      construir();
+      lista.querySelector('.quiz__opcao')?.focus();
+    });
+  }
+
+  function construir() {
+    dados.perguntasQuiz.forEach((q, i) => {
+      const item = elemento('article', 'quiz__item', lista);
+
+      const numero = elemento('span', 'quiz__numero', item, `Pergunta ${i + 1} de ${total}`);
+      numero.id = `quiz-p${i}`;
+      elemento('h3', 'quiz__pergunta', item, q.pergunta);
+
+      const grupo = elemento('div', 'quiz__opcoes', item);
+      grupo.setAttribute('role', 'group');
+      grupo.setAttribute('aria-labelledby', `quiz-p${i}`);
+
+      const resposta = elemento('div', 'quiz__resposta', item);
+      resposta.hidden = true;
+      resposta.setAttribute('role', 'status');
+
+      const botoes = q.opcoes.map((texto, j) => {
+        const b = elemento('button', 'quiz__opcao', grupo);
+        b.type = 'button';
+        elemento('span', 'quiz__letra', b, String.fromCharCode(97 + j));
+        elemento('span', null, b, texto);
+        b.addEventListener('click', () => responder(j));
+        return b;
+      });
+
+      function responder(escolha) {
+        const certo = escolha === q.correta;
+        respondidas += 1;
+        if (certo) acertos += 1;
+
+        botoes.forEach((b, j) => {
+          b.disabled = true;
+          if (j === q.correta) b.dataset.estado = 'certa';
+          else if (j === escolha) b.dataset.estado = 'errada';
+          else b.dataset.estado = 'apagada';
+        });
+
+        resposta.hidden = false;
+        resposta.dataset.tom = certo ? 'certo' : 'errado';
+        resposta.textContent = '';
+        elemento('strong', null, resposta, certo ? 'Isso mesmo.' : 'Não é essa.');
+        elemento('span', null, resposta, ` ${q.explicacao}`);
+        atualizarPlacar();
+      }
+    });
+  }
+
+  construir();
 }
 
 /* =========================================================================
@@ -393,7 +587,7 @@ function montarGraficos() {
 }
 
 /* =========================================================================
- * Cenas 3D — carregadas sob demanda
+ * Cenas 3D, carregadas sob demanda
  * ====================================================================== */
 
 async function montarCenas() {
@@ -420,7 +614,9 @@ async function montarCenas() {
 
   // --- corte do Pacífico ---
   const pacifico = criarPacifico($('#palco-pacifico'), { fase: 0 });
-  ligarFases($('[data-fases="pacifico"]'), (v) => pacifico.definirFase(v), $('#legenda-pacifico'));
+  // liga a cena ao simulador e sincroniza com o valor que já está na tela
+  aplicarFaseNaCena = (v) => pacifico.definirFase(v);
+  aplicarFaseNaCena(Math.max(-1, Math.min(1, oniCorrente / ONI_CHEIO)));
 
   const dica = $('#dica-pacifico');
   $('#palco-pacifico').addEventListener('pointerdown', () => {
@@ -456,6 +652,8 @@ function iniciar() {
   montarReferencias();
   montarGraficos();
   montarMapa();
+  ligarSimulador();
+  montarQuiz();
   ligarEtapas();
   ligarRevelacao();
   montarCenas().catch((e) => console.error('cenas 3D:', e));

@@ -112,7 +112,7 @@ export function criarPalco(hospedeiro, opcoes = {}) {
     cancelAnimationFrame(quadro);
   }
 
-  /** Desenha um único quadro — usado quando o movimento está reduzido. */
+  /** Desenha um único quadro, usado quando o movimento está reduzido. */
   function quadroUnico() {
     dimensionar();
     if (estado.aoQuadro) estado.aoQuadro(0, relogio.decorrido);
@@ -217,7 +217,7 @@ export function criarPalco(hospedeiro, opcoes = {}) {
 }
 
 /**
- * Arrasto para girar — substituto leve do OrbitControls, sem dependências.
+ * Arrasto para girar: substituto leve do OrbitControls, sem dependências.
  * Devolve um objeto com os ângulos correntes, já amortecidos.
  */
 export function controleArrasto(elemento, opcoes = {}) {

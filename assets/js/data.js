@@ -1,5 +1,5 @@
 /**
- * Dados do site — El Niño e o Brasil
+ * Dados do site: El Niño e o Brasil
  * ---------------------------------------------------------------------------
  * Todos os conjuntos declaram a instituição de origem no campo `fonte`.
  * Os valores foram compilados de boletins e séries publicadas por essas
@@ -8,7 +8,7 @@
  */
 
 /* ===========================================================================
- * 1. ONI — Oceanic Niño Index (anomalia de TSM na região Niño 3.4)
+ * 1. ONI, o Oceanic Niño Index (anomalia de TSM na região Niño 3.4)
  * ------------------------------------------------------------------------ */
 
 /** Limiares oficiais de classificação de intensidade (NOAA/CPC). */
@@ -34,8 +34,8 @@ export function classificarONI(oni) {
 
 /**
  * ONI do trimestre DJF (dezembro–janeiro–fevereiro), indexado pelo ano de
- * janeiro. DJF é, tipicamente, o trimestre de pico do El Niño — daí o nome
- * dado pelos pescadores peruanos, que associavam o aquecimento ao Natal.
+ * janeiro. DJF é, tipicamente, o trimestre de pico do El Niño, e daí
+ * vem o nome dado pelos pescadores peruanos, que associavam o aquecimento ao Natal.
  * Fonte: NOAA / Climate Prediction Center.
  */
 export const oniDJF = [
@@ -55,7 +55,7 @@ export const oniDJF = [
 ].map(([ano, oni]) => ({ ano, oni }));
 
 export const oniDJFMeta = {
-  fonte: 'NOAA / Climate Prediction Center — Oceanic Niño Index (Niño 3.4)',
+  fonte: 'NOAA / Climate Prediction Center, Oceanic Niño Index (Niño 3.4)',
   url: 'https://origin.cpc.ncep.noaa.gov/products/analysis_monitoring/ensostuff/ONI_v5.php',
   nota: 'Anomalia de temperatura da superfície do mar na região Niño 3.4 (5°N–5°S, 170°W–120°W), média móvel de 3 meses, trimestre DJF.',
 };
@@ -122,7 +122,7 @@ export const regioesNino = [
 
 /**
  * Composição dos desvios típicos observados em episódios fortes de El Niño.
- * Os intervalos refletem a variação entre eventos — nenhum El Niño se repete
+ * Os intervalos refletem a variação entre eventos: nenhum El Niño se repete
  * igual, e o sinal é mais confiável no Sul e no Norte/Nordeste.
  * Fontes: INPE/CPTEC, INMET, IRI/Columbia.
  */
@@ -153,7 +153,7 @@ export const regioesBrasil = {
     confianca: 'alta',
     estacao: 'Fev–Mai (quadra chuvosa do semiárido)',
     resumo:
-      'Seca na quadra chuvosa. A Zona de Convergência Intertropical (ZCIT) fica retida mais ao norte e demora a descer sobre o semiárido — a chuva que deveria cair entre fevereiro e maio simplesmente não vem.',
+      'Seca na quadra chuvosa. A Zona de Convergência Intertropical (ZCIT) fica retida mais ao norte e demora a descer sobre o semiárido. A chuva que deveria cair entre fevereiro e maio simplesmente não vem.',
     impactos: [
       'Perda da safra de sequeiro: milho, feijão e mandioca de subsistência',
       'Reservatórios abaixo do volume morto e colapso do abastecimento urbano',
@@ -170,7 +170,7 @@ export const regioesBrasil = {
     confianca: 'baixa',
     estacao: 'Sinal irregular ao longo do ano',
     resumo:
-      'Sinal fraco e irregular na chuva, mas forte no calor. A região fica entre dois regimes opostos — o Sul encharcado e o Norte seco — e o resultado depende de cada evento.',
+      'Sinal fraco e irregular na chuva, mas forte no calor. A região fica entre dois regimes opostos, o Sul encharcado e o Norte seco, e o resultado depende de cada evento.',
     impactos: [
       'Veranicos (períodos secos dentro da estação chuvosa) que atrasam o plantio da soja',
       'Atraso na safrinha de milho, semeada fora da janela ideal',
@@ -187,7 +187,7 @@ export const regioesBrasil = {
     confianca: 'baixa',
     estacao: 'Sinal irregular; calor mais provável na primavera-verão',
     resumo:
-      'A região de transição. A chuva pode ficar acima ou abaixo da média conforme o evento, mas as ondas de calor são consistentes — os recordes de temperatura do Brasil vêm caindo em anos de El Niño.',
+      'A região de transição. A chuva pode ficar acima ou abaixo da média conforme o evento, mas as ondas de calor são consistentes: os recordes de temperatura do Brasil vêm caindo em anos de El Niño.',
     impactos: [
       'Ondas de calor intensas e prolongadas, com recordes de temperatura',
       'Chuvas concentradas em eventos extremos, com deslizamentos',
@@ -312,7 +312,7 @@ export const linhaDoTempo = [
     titulo: 'A Grande Seca',
     oni: null,
     texto:
-      'O El Niño de 1877–78, combinado a um Atlântico Norte anormalmente quente, produziu a pior seca da história do Nordeste. As estimativas de mortes no Ceará e nos estados vizinhos vão de centenas de milhares a meio milhão de pessoas — foi o evento que colocou a seca no centro da política brasileira e levou à criação dos primeiros órgãos de combate à estiagem.',
+      'O El Niño de 1877–78, combinado a um Atlântico Norte anormalmente quente, produziu a pior seca da história do Nordeste. As estimativas de mortes no Ceará e nos estados vizinhos vão de centenas de milhares a meio milhão de pessoas. Foi o evento que colocou a seca no centro da política brasileira e levou à criação dos primeiros órgãos de combate à estiagem.',
     tags: ['Nordeste', 'Seca', 'Fome'],
   },
   {
@@ -320,7 +320,7 @@ export const linhaDoTempo = [
     titulo: 'O El Niño que ninguém viu chegar',
     oni: 2.2,
     texto:
-      'O evento cresceu sem ser detectado: os satélites da época foram enganados pela poeira da erupção do El Chichón e a rede de boias ainda não existia. No Brasil, o Nordeste entrou no quinto ano de seca enquanto Santa Catarina vivia a maior enchente do século — em julho de 1983, o rio Itajaí-Açu chegou a 15,34 m em Blumenau. Foi esse fracasso que motivou a construção da rede de monitoramento do Pacífico.',
+      'O evento cresceu sem ser detectado: os satélites da época foram enganados pela poeira da erupção do El Chichón e a rede de boias ainda não existia. No Brasil, o Nordeste entrou no quinto ano de seca enquanto Santa Catarina vivia a maior enchente do século: em julho de 1983, o rio Itajaí-Açu chegou a 15,34 m em Blumenau. Foi esse fracasso que motivou a construção da rede de monitoramento do Pacífico.',
     tags: ['Sul', 'Nordeste', 'Enchente'],
   },
   {
@@ -374,9 +374,9 @@ export const ecossistemas = [
     icone: 'seca',
     chamada: 'O bioma que já vive no limite',
     texto:
-      'A Caatinga é adaptada à seca — as plantas perdem as folhas e esperam. O problema é a duração: quando o El Niño encurta a quadra chuvosa vários anos seguidos, a vegetação não consegue se recuperar entre os ciclos, o solo perde cobertura e áreas inteiras avançam para a desertificação. Cerca de 13% do semiárido brasileiro já apresenta processo de degradação severa.',
+      'A Caatinga é adaptada à seca: as plantas perdem as folhas e esperam. O problema é a duração: quando o El Niño encurta a quadra chuvosa vários anos seguidos, a vegetação não consegue se recuperar entre os ciclos, o solo perde cobertura e áreas inteiras avançam para a desertificação. Cerca de 13% do semiárido brasileiro já apresenta processo de degradação severa.',
     dados: [
-      ['Quadra chuvosa concentrada em', 'fevereiro a maio — sem ela, não há segunda chance'],
+      ['Quadra chuvosa concentrada em', 'fevereiro a maio; sem ela, não há segunda chance'],
       ['Seca plurianual mais recente', '2012–2017, a mais longa em registros modernos'],
       ['População no semiárido', 'cerca de 28 milhões de pessoas'],
     ],
@@ -388,7 +388,7 @@ export const ecossistemas = [
     icone: 'coral',
     chamada: 'Branqueamento em escala global',
     texto:
-      'O coral expulsa as algas que vivem dentro dele quando a água passa do limite térmico por semanas seguidas — perde a cor e, se o calor persistir, morre. O El Niño de 2023–24 ajudou a desencadear o quarto evento global de branqueamento, declarado em abril de 2024. No Brasil, os recifes de Abrolhos e do litoral nordestino registraram branqueamento severo.',
+      'O coral expulsa as algas que vivem dentro dele quando a água passa do limite térmico por semanas seguidas. Perde a cor e, se o calor persistir, morre. O El Niño de 2023–24 ajudou a desencadear o quarto evento global de branqueamento, declarado em abril de 2024. No Brasil, os recifes de Abrolhos e do litoral nordestino registraram branqueamento severo.',
     dados: [
       ['Eventos globais de branqueamento', '1998, 2010, 2014–17 e 2023–24'],
       ['Recifes brasileiros afetados em 2024', 'Abrolhos, Costa dos Corais e litoral do Nordeste'],
@@ -402,7 +402,7 @@ export const ecossistemas = [
     icone: 'peixe',
     chamada: 'Onde o El Niño foi descoberto',
     texto:
-      'Foram pescadores peruanos que deram nome ao fenômeno. O El Niño desliga a ressurgência que traz nutrientes das profundezas para a costa do Peru, o fitoplâncton some e a anchoveta — a maior pescaria do mundo em volume — colapsa. Como a anchoveta vira farinha de peixe, o efeito chega ao Brasil no preço da ração de aves, suínos e da aquicultura.',
+      'Foram pescadores peruanos que deram nome ao fenômeno. O El Niño desliga a ressurgência que traz nutrientes das profundezas para a costa do Peru, o fitoplâncton some e a anchoveta, a maior pescaria do mundo em volume, colapsa. Como a anchoveta vira farinha de peixe, o efeito chega ao Brasil no preço da ração de aves, suínos e da aquicultura.',
     dados: [
       ['Colapsos históricos da anchoveta', '1972–73, 1982–83, 1997–98 e 2023'],
       ['Temporada de pesca cancelada', 'primeira safra de 2023, no Peru'],
@@ -467,7 +467,7 @@ export const instrumentos = [
     nome: 'Índice de Oscilação Sul (IOS)',
     desde: '1924',
     texto:
-      'A diferença de pressão atmosférica entre o Taiti e Darwin, na Austrália. IOS fortemente negativo significa alísios enfraquecidos — a metade atmosférica do fenômeno, medida desde muito antes dos satélites.',
+      'A diferença de pressão atmosférica entre o Taiti e Darwin, na Austrália. IOS fortemente negativo significa alísios enfraquecidos. É a metade atmosférica do fenômeno, medida desde muito antes dos satélites.',
   },
 ];
 
@@ -537,7 +537,7 @@ export const referencias = [
   },
   {
     autor: 'NOAA Climate.gov',
-    titulo: 'ENSO Blog — explicações técnicas acessíveis sobre o fenômeno',
+    titulo: 'ENSO Blog: explicações técnicas acessíveis sobre o fenômeno',
     url: 'https://www.climate.gov/news-features/department/enso-blog',
   },
   {
@@ -567,7 +567,136 @@ export const referencias = [
   },
   {
     autor: 'Ministério da Saúde',
-    titulo: 'Painel de arboviroses — casos de dengue',
+    titulo: 'Painel de arboviroses: casos de dengue',
     url: 'https://www.gov.br/saude/',
+  },
+];
+
+/* ===========================================================================
+ * 10. Simulador: como o desvio esperado escala com a intensidade
+ * ------------------------------------------------------------------------ */
+
+/**
+ * Os desvios tabulados em `regioesBrasil` correspondem a um evento forte,
+ * com pico de ONI perto de +1,8 °C. O simulador reescala linearmente a partir
+ * desse ponto de referência. É uma aproximação didática: serve para mostrar
+ * o sentido e a ordem de grandeza do sinal, não para prever um evento real.
+ */
+export const ONI_REFERENCIA = 1.8;
+
+/** Abaixo deste valor absoluto o ENOS é considerado neutro e não há sinal. */
+export const ONI_NEUTRO = 0.5;
+
+/**
+ * A resposta da temperatura não é simétrica. O El Niño aquece o Brasil com
+ * mais força do que a La Niña o esfria, e sobre um clima de fundo cada vez
+ * mais quente o resfriamento aparece menos ainda: anos de La Niña seguem
+ * quentes em termos absolutos. Este fator amortece o lado frio da escala.
+ * Já o sinal de chuva inverte de forma razoavelmente simétrica, e por isso
+ * não é amortecido.
+ */
+export const AMORTECIMENTO_FRIO = 0.55;
+
+/**
+ * Desvio esperado de chuva e temperatura numa região, para um dado ONI.
+ * O sinal inverte na La Niña: onde o El Niño seca, a La Niña encharca.
+ */
+export function projetarRegiao(regiao, oni) {
+  if (Math.abs(oni) < ONI_NEUTRO) {
+    return { chuva: 0, temperatura: 0, neutro: true };
+  }
+  const fator = oni / ONI_REFERENCIA;
+  const fatorTermico = oni < 0 ? fator * AMORTECIMENTO_FRIO : fator;
+  return {
+    chuva: regiao.chuva * fator,
+    temperatura: regiao.temperatura * fatorTermico,
+    neutro: false,
+  };
+}
+
+/* ===========================================================================
+ * 11. Quiz
+ * ------------------------------------------------------------------------ */
+
+export const perguntasQuiz = [
+  {
+    pergunta: 'O que acontece com os ventos alísios durante um El Niño?',
+    opcoes: [
+      'Ficam mais fortes e empurram ainda mais água para oeste',
+      'Enfraquecem, e no Pacífico oeste chegam a inverter de sentido',
+      'Mudam de direção e passam a soprar do sul para o norte',
+    ],
+    correta: 1,
+    explicacao:
+      'O enfraquecimento dos alísios é o gatilho de todo o resto. Sem eles segurando a água quente no oeste, ela escorrega de volta para leste, a termoclina se nivela e a ressurgência desliga.',
+  },
+  {
+    pergunta: 'Qual região do Brasil costuma receber chuva acima da média em um El Niño forte?',
+    opcoes: ['Nordeste', 'Norte', 'Sul'],
+    correta: 2,
+    explicacao:
+      'O jato subtropical se intensifica e trava as frentes frias sobre o Sul. A mesma frente que passaria em um dia fica parada e chove por uma semana, com desvios de 25% a 70% acima da média na primavera.',
+  },
+  {
+    pergunta: 'O que o ONI mede, exatamente?',
+    opcoes: [
+      'A diferença de pressão atmosférica entre o Taiti e Darwin',
+      'A anomalia de temperatura da superfície do mar na região Niño 3.4',
+      'A altura média das ondas no Pacífico equatorial',
+    ],
+    correta: 1,
+    explicacao:
+      'O ONI é a anomalia de temperatura do mar no Niño 3.4, em média móvel de três meses. A diferença de pressão entre o Taiti e Darwin é o IOS, que mede a metade atmosférica do mesmo fenômeno.',
+  },
+  {
+    pergunta: 'Qual foi o El Niño mais intenso já medido desde 1950?',
+    opcoes: ['1997–98', '2015–16', '2023–24'],
+    correta: 1,
+    explicacao:
+      'O evento de 2015–16 chegou a +2,6 °C no pico do ONI. O de 1997–98 ficou em +2,4 °C e o de 2023–24, em +2,0 °C. Intensidade no Pacífico, porém, não se traduz direto em intensidade de impacto no Brasil.',
+  },
+  {
+    pergunta: 'Em outubro de 2023 o rio Negro chegou a 12,70 m em Manaus. Por que isso foi notícia?',
+    opcoes: [
+      'Foi a maior cheia registrada na cidade',
+      'Foi o menor nível desde o início das medições, em 1902',
+      'Foi a primeira vez que o nível do rio foi medido com precisão',
+    ],
+    correta: 1,
+    explicacao:
+      'Foi o recorde de seca em mais de um século de leituras da régua do porto de Manaus. E o recorde caiu de novo no ano seguinte: 12,66 m em outubro de 2024.',
+  },
+  {
+    pergunta: 'Por que a Amazônia seca durante um El Niño?',
+    opcoes: [
+      'Porque o ar que desce sobre a região impede a formação de nuvens',
+      'Porque o desmatamento sempre aumenta nesses anos',
+      'Porque as nascentes dos rios congelam nos Andes',
+    ],
+    correta: 0,
+    explicacao:
+      'A circulação de Walker se reorganiza e instala um ramo descendente sobre a Amazônia e o norte da América do Sul. Ar que desce aquece, seca e não forma nuvem, bem quando a estação seca já está no auge.',
+  },
+  {
+    pergunta: 'O que costuma acontecer depois de um El Niño forte?',
+    opcoes: [
+      'Outro El Niño, sempre mais forte que o anterior',
+      'Um período neutro que dura cerca de dez anos',
+      'Uma La Niña, porque o sistema tende a passar do ponto',
+    ],
+    correta: 2,
+    explicacao:
+      'Ondas de Rossby refletidas na borda oeste do Pacífico trazem água fria de volta. O sistema raramente para no equilíbrio: costuma ultrapassar e virar La Niña no ano seguinte.',
+  },
+  {
+    pergunta: 'De onde vem o nome “El Niño”?',
+    opcoes: [
+      'Do sobrenome do oceanógrafo que descreveu o fenômeno',
+      'De pescadores peruanos, que associavam a água quente ao Natal',
+      'De uma expressão indígena andina que significa “mar morno”',
+    ],
+    correta: 1,
+    explicacao:
+      'El Niño é o Menino Jesus. Pescadores do norte do Peru notaram, no século XIX, que em certos anos a água quente chegava por volta do Natal e a pescaria sumia. Só muito depois se descobriu que aquilo era a ponta de um fenômeno planetário.',
   },
 ];

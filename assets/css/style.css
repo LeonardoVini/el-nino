@@ -1,5 +1,5 @@
 /* ===========================================================================
-   El Niño e o Brasil — folha de estilo
+   El Niño e o Brasil: folha de estilo
    Tema oceânico escuro. A paleta de dados foi validada para daltonismo e
    contraste (ver README, seção "Acessibilidade e cor").
    ======================================================================== */
@@ -27,7 +27,7 @@
   --cool: #3f9ae0;
   --neutral: #5b6a78;
 
-  /* Rampa divergente — anomalia */
+  /* Rampa divergente de anomalia */
   --warm-1: #5b3a35;
   --warm-2: #8a4433;
   --warm-3: #b44f31;
@@ -540,7 +540,7 @@ h3 {
   transition: opacity 0.4s;
 }
 
-/* Controles de fase — La Niña / Neutro / El Niño */
+/* Controles de fase: La Niña / Neutro / El Niño */
 
 .fases {
   display: inline-flex;
@@ -1428,6 +1428,383 @@ table.dados tbody tr:last-child td {
   font-size: 0.8rem;
 }
 
+
+/* --- Simulador ---------------------------------------------------------- */
+
+.simulador {
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: clamp(20px, 2.6vw, 28px);
+  margin-bottom: 22px;
+  display: grid;
+  gap: 18px;
+}
+
+.simulador__cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px 24px;
+}
+
+.simulador__rotulo {
+  display: grid;
+  gap: 3px;
+  font-weight: 600;
+  font-size: 1.02rem;
+  cursor: pointer;
+}
+
+.simulador__rotulo span {
+  font-weight: 400;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.simulador__leitura {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.simulador__valor {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.simulador__faixa {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.simulador__polo {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  flex: none;
+}
+
+.simulador__polo--frio { color: var(--cool); }
+.simulador__polo--quente { color: var(--warm); }
+
+.simulador__texto {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 0.94rem;
+  min-height: 3.2em;
+}
+
+/* controle deslizante, com a trilha carregando a própria escala divergente */
+
+.deslizante {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 1;
+  height: 26px;
+  background: transparent;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.deslizante::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--cool-5) 0%, var(--cool-3) 22%,
+    var(--neutral) 46%, var(--neutral) 54%,
+    var(--warm-3) 78%, var(--warm-5) 100%
+  );
+}
+
+.deslizante::-moz-range-track {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--cool-5) 0%, var(--cool-3) 22%,
+    var(--neutral) 46%, var(--neutral) 54%,
+    var(--warm-3) 78%, var(--warm-5) 100%
+  );
+}
+
+.deslizante::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  margin-top: -7px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 3px solid var(--surface-1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.deslizante::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 3px solid var(--surface-1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.deslizante:focus-visible::-webkit-slider-thumb { border-color: var(--accent); }
+.deslizante:focus-visible::-moz-range-thumb { border-color: var(--accent); }
+
+/* --- Projeção por região ------------------------------------------------ */
+
+.projecao__intro {
+  color: var(--ink-2);
+  margin: 10px 0 22px;
+  font-size: 0.95rem;
+}
+
+.projecao__lista {
+  display: grid;
+  gap: 10px;
+}
+
+.prev {
+  display: grid;
+  grid-template-columns: 130px 1fr 140px 76px;
+  align-items: center;
+  gap: 16px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.prev:last-child { border-bottom: 0; }
+
+.prev__nome {
+  font-weight: 600;
+  font-size: 0.93rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.prev__ressalva {
+  font-weight: 400;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.prev__trilha {
+  position: relative;
+  height: 14px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.prev__eixo {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--axis);
+}
+
+.prev__barra {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  border-radius: 3px;
+  transition: width 0.25s ease, left 0.25s ease, background 0.25s, opacity 0.25s;
+}
+
+.prev__chuva {
+  font-size: 0.88rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--ink-2);
+}
+
+.prev__chuva[data-tom="seca"] { color: #f3a683; }
+.prev__chuva[data-tom="chuva"] { color: #8cc8f2; }
+.prev__chuva[data-tom="neutro"] { color: var(--muted); }
+
+.prev__temp {
+  font-size: 0.88rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--ink-2);
+}
+
+.projecao__aviso {
+  margin: 22px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--hairline);
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+/* --- Quiz --------------------------------------------------------------- */
+
+.quiz {
+  display: grid;
+  gap: 16px;
+}
+
+.quiz__item {
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: clamp(18px, 2.4vw, 26px);
+}
+
+.quiz__numero {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.quiz__pergunta {
+  font-size: 1.1rem;
+  margin: 8px 0 18px;
+  line-height: 1.3;
+}
+
+.quiz__opcoes {
+  display: grid;
+  gap: 8px;
+}
+
+.quiz__opcao {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  padding: 13px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 0.94rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+
+.quiz__opcao:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--ink);
+}
+
+.quiz__opcao:disabled { cursor: default; }
+
+.quiz__letra {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--surface-3);
+  color: var(--ink-2);
+  align-self: flex-start;
+  margin-top: 1px;
+}
+
+.quiz__opcao[data-estado="certa"] {
+  border-color: #0ca30c;
+  background: rgba(12, 163, 12, 0.13);
+  color: var(--ink);
+}
+
+.quiz__opcao[data-estado="certa"] .quiz__letra {
+  background: #0ca30c;
+  color: #04220a;
+}
+
+.quiz__opcao[data-estado="errada"] {
+  border-color: var(--warm);
+  background: rgba(226, 96, 58, 0.13);
+  color: var(--ink);
+}
+
+.quiz__opcao[data-estado="errada"] .quiz__letra {
+  background: var(--warm);
+  color: #2a0e06;
+}
+
+.quiz__opcao[data-estado="apagada"] { opacity: 0.45; }
+
+.quiz__resposta {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  border-left: 2px solid var(--accent);
+  font-size: 0.92rem;
+  color: var(--ink-2);
+  line-height: 1.55;
+}
+
+.quiz__resposta strong { color: var(--ink); }
+.quiz__resposta[data-tom="certo"] { border-left-color: #0ca30c; }
+.quiz__resposta[data-tom="errado"] { border-left-color: var(--warm); }
+
+.quiz__placar {
+  margin-top: 22px;
+  padding: 24px;
+  border-radius: var(--radius);
+  background: var(--surface-1);
+  border: 1px solid var(--hairline-strong);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+}
+
+.quiz__nota {
+  font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.quiz__nota[data-tom="cheio"] { color: #0ca30c; }
+.quiz__nota[data-tom="bom"] { color: var(--accent); }
+.quiz__nota[data-tom="parcial"] { color: var(--warm); }
+
+.quiz__recado {
+  color: var(--ink-2);
+  font-size: 0.93rem;
+  flex: 1 1 260px;
+}
+
+@media (max-width: 700px) {
+  .prev {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "nome temp"
+      "trilha trilha"
+      "chuva chuva";
+    gap: 6px 12px;
+  }
+
+  .prev__nome { grid-area: nome; }
+  .prev__temp { grid-area: temp; }
+  .prev__trilha { grid-area: trilha; }
+  .prev__chuva { grid-area: chuva; text-align: left; }
+
+  .simulador__faixa { gap: 9px; }
+  .simulador__polo { font-size: 0.68rem; }
+}
 
 /* --- rótulos ancorados nas cenas 3D ------------------------------------- */
 

@@ -1,10 +1,10 @@
 /**
- * Corte 3D do Pacífico equatorial — a cena que explica o mecanismo.
+ * Corte 3D do Pacífico equatorial: a cena que explica o mecanismo.
  *
  * O eixo x vai da Indonésia (oeste, à esquerda) à América do Sul (leste),
  * o eixo y é a profundidade e o eixo z dá espessura à fatia do oceano.
- * Tudo — inclinação da termoclina, cor da água, força dos alísios, posição
- * da convecção, ressurgência — deriva de um único número, a fase:
+ * Tudo, da inclinação da termoclina, cor da água, força dos alísios, à posição
+ * da convecção e à ressurgência, deriva de um único número, a fase:
  *
  *    fase = −1  La Niña      fase = 0  neutro      fase = +1  El Niño
  */

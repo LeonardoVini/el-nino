@@ -2,13 +2,13 @@
  * Cena do globo.
  *
  * Dois modos:
- *   'mundo'       — globo girando, com a anomalia de temperatura do Pacífico
+ *   'mundo':       globo girando, com a anomalia de temperatura do Pacífico
  *                   respondendo à fase escolhida (La Niña / Neutro / El Niño);
- *   'teleconexao' — globo travado na América do Sul, com os arcos que ligam
+ *   'teleconexao': globo travado na América do Sul, com os arcos que ligam
  *                   o Pacífico às regiões brasileiras.
  *
  * A textura da Terra é desenhada num <canvas> a partir dos polígonos de terra
- * do Natural Earth — nada é baixado de fora.
+ * do Natural Earth. Nada é baixado de fora.
  */
 
 import {

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>El Niño e o Brasil — como o Pacífico muda o clima do país</title>
+<title>El Niño e o Brasil: como o Pacífico muda o clima do país</title>
 <meta name="description" content="Site educativo com animações 3D, gráficos e dados sobre o El Niño: como o fenômeno se forma no Pacífico, como é medido e como afeta os ecossistemas e as regiões do Brasil.">
 <meta name="author" content="Projeto El Niño e o Brasil">
 <meta name="color-scheme" content="dark">
@@ -12,7 +12,7 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:title" content="El Niño e o Brasil">
-<meta property="og:description" content="Como o aquecimento do Pacífico seca a Amazônia, adia a chuva no semiárido e alaga o Sul — explicado com animações 3D, gráficos e dados.">
+<meta property="og:description" content="Como o aquecimento do Pacífico seca a Amazônia, adia a chuva no semiárido e alaga o Sul, explicado com animações 3D, gráficos e dados.">
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='13' fill='%230e1a26'/><ellipse cx='16' cy='16' rx='13' ry='5' fill='%23e2603a'/><circle cx='16' cy='16' r='13' fill='none' stroke='%234fd1c5' stroke-width='2'/></svg>">
 <link rel="stylesheet" href="assets/css/style.css">
@@ -35,6 +35,7 @@
       <a href="#ecossistemas">Ecossistemas</a>
       <a href="#historia">História</a>
       <a href="#adaptacao">O que fazer</a>
+      <a href="#quiz">Quiz</a>
     </nav>
   </div>
   <div class="progresso" id="progresso" role="presentation"></div>
@@ -77,7 +78,7 @@
         <h2 id="h-o-que-e">O El Niño é metade de um sistema só</h2>
         <p class="linha-fina">
           Oceano e atmosfera não são duas coisas separadas sobre o Pacífico. São um
-          mecanismo acoplado — e o El Niño é o que acontece quando ele muda de marcha.
+          mecanismo acoplado, e o El Niño é o que acontece quando ele muda de marcha.
         </p>
       </div>
 
@@ -88,8 +89,8 @@
             oeste ao longo do equador e empurram a água aquecida pelo sol para o lado da
             Indonésia. Ali se forma a <strong>poça quente do Pacífico oeste</strong>, a maior
             massa de água quente do planeta, com mais de 29 °C. Do outro lado, na costa do
-            Peru, a água que sai é reposta por água fria vinda do fundo — a
-            <strong>ressurgência</strong> — e a superfície fica até 8 °C mais fria que no
+            Peru, a água que sai é reposta por água fria vinda do fundo, a
+            <strong>ressurgência</strong>, e a superfície fica até 8 °C mais fria que no
             lado oposto do oceano.
           </p>
           <p>
@@ -100,13 +101,13 @@
           </p>
           <p>
             No <strong>El Niño</strong>, os alísios enfraquecem. A água quente escorrega de
-            volta para leste, a ressurgência desliga e a chuva — que acompanha o mar quente —
+            volta para leste, a ressurgência desliga e a chuva, que acompanha o mar quente,
             se muda do oeste para o meio do Pacífico. Toda a circulação atmosférica tropical
             se reorganiza em torno da nova posição. Na <strong>La Niña</strong>, acontece o
             contrário: os alísios se intensificam e tudo fica mais extremo na direção normal.
           </p>
           <p>
-            O nome científico do conjunto é <strong>ENOS</strong> — El Niño–Oscilação Sul.
+            O nome científico do conjunto é <strong>ENOS</strong>, El Niño–Oscilação Sul.
             "El Niño" é a metade oceânica; "Oscilação Sul" é a gangorra de pressão atmosférica
             entre o Pacífico oeste e o leste. São duas caras do mesmo fenômeno, e nenhuma
             explica nada sozinha.
@@ -162,19 +163,35 @@
         </p>
       </div>
 
-      <div class="barra-controle revela">
-        <div class="fases" role="group" aria-label="Fase do fenômeno" data-fases="pacifico">
-          <button type="button" data-fase="nina" aria-pressed="false">
-            <span class="chave" style="background:var(--cool)" aria-hidden="true"></span>La Niña
-          </button>
-          <button type="button" data-fase="neutro" aria-pressed="true">
-            <span class="chave" style="background:var(--neutral)" aria-hidden="true"></span>Neutro
-          </button>
-          <button type="button" data-fase="nino" aria-pressed="false">
-            <span class="chave" style="background:var(--warm)" aria-hidden="true"></span>El Niño
-          </button>
+      <div class="simulador revela">
+        <div class="simulador__cabeca">
+          <label class="simulador__rotulo" for="controle-oni">
+            Intensidade do evento
+            <span>ONI, anomalia de temperatura na região Niño 3.4</span>
+          </label>
+          <div class="simulador__leitura">
+            <strong class="simulador__valor" id="valor-oni">+0,0 °C</strong>
+            <span class="etiqueta" id="classe-oni">Neutro</span>
+          </div>
         </div>
-        <p class="barra-controle__texto" id="legenda-pacifico">
+
+        <div class="simulador__faixa">
+          <span class="simulador__polo simulador__polo--frio">La Niña</span>
+          <input type="range" id="controle-oni" class="deslizante"
+                 min="-2.5" max="2.5" step="0.1" value="0"
+                 aria-label="Intensidade do evento, em graus Celsius de anomalia"
+                 aria-describedby="valor-oni">
+          <span class="simulador__polo simulador__polo--quente">El Niño</span>
+        </div>
+
+        <div class="fases" role="group" aria-label="Atalhos de intensidade" id="atalhos-oni">
+          <button type="button" data-oni="-1.8" aria-pressed="false">La Niña forte</button>
+          <button type="button" data-oni="0" aria-pressed="true">Neutro</button>
+          <button type="button" data-oni="1.2" aria-pressed="false">El Niño moderado</button>
+          <button type="button" data-oni="2.0" aria-pressed="false">El Niño muito forte</button>
+        </div>
+
+        <p class="simulador__texto" id="legenda-pacifico" aria-live="polite">
           Estado neutro: os alísios sopram firme para oeste e a termoclina fica bem
           inclinada, rasa no leste e profunda no oeste.
         </p>
@@ -194,6 +211,24 @@
         fica entre cerca de 50 m (leste) e 150 m (oeste) de profundidade.
       </p>
 
+      <div class="cartao revela projecao" style="margin-top:28px">
+        <h3>E o que isso faria com o Brasil</h3>
+        <p class="projecao__intro">
+          Mova o controle acima e acompanhe o sinal chegar. Na La Niña tudo se inverte:
+          onde o El Niño seca, ela encharca.
+        </p>
+        <div class="projecao__lista" id="projecao-regioes"></div>
+        <p class="projecao__aviso">
+          Escala didática. Os valores partem da composição observada em eventos fortes
+          (pico de ONI perto de +1,8 °C) e crescem em proporção à intensidade. Serve para
+          mostrar o sentido e a ordem de grandeza do sinal, nunca como previsão de um
+          evento real: cada El Niño tem personalidade própria, e no Centro-Oeste e no
+          Sudeste o sinal de chuva é fraco mesmo em eventos intensos. O lado frio da
+          escala vem amortecido na temperatura, porque a La Niña esfria o Brasil bem
+          menos do que o El Niño o aquece.
+        </p>
+      </div>
+
       <div class="grade grade--2" style="margin-top:44px">
         <div class="revela">
           <h3 style="margin-bottom:18px">A realimentação que faz o evento crescer sozinho</h3>
@@ -209,7 +244,7 @@
             <div class="etapa">
               <div>
                 <h3>Uma onda oceânica atravessa o Pacífico</h3>
-                <p>O empurrão gera uma onda de Kelvin equatorial — um pulso invisível na
+                <p>O empurrão gera uma onda de Kelvin equatorial, um pulso invisível na
                   superfície que leva de dois a três meses para cruzar o oceano, afundando
                   a termoclina por onde passa.</p>
               </div>
@@ -218,7 +253,7 @@
               <div>
                 <h3>A ressurgência deixa de funcionar</h3>
                 <p>Com a termoclina afundada no leste, a água que sobe na costa do Peru
-                  não vem mais da camada fria — vem de água já morna. A superfície esquenta
+                  não vem mais da camada fria, e sim de água já morna. A superfície esquenta
                   rápido.</p>
               </div>
             </div>
@@ -242,7 +277,7 @@
               <div>
                 <h3>O pico e a descarga</h3>
                 <p>Entre novembro e janeiro o evento atinge o máximo. Ondas de Rossby
-                  refletidas na borda oeste já vêm trazendo água fria de volta — e o sistema
+                  refletidas na borda oeste já vêm trazendo água fria de volta, e o sistema
                   costuma passar do ponto, virando La Niña no ano seguinte.</p>
               </div>
             </div>
@@ -254,7 +289,7 @@
             <h3>O que chega ao Brasil, e por quê</h3>
             <p style="color:var(--ink-2);margin-top:12px">
               O Pacífico fica a milhares de quilômetros do Brasil. O recado viaja por dois
-              caminhos distintos — e é por isso que o país reage de formas opostas ao mesmo
+              caminhos distintos, e é por isso que o país reage de formas opostas ao mesmo
               evento.
             </p>
             <div style="margin-top:22px">
@@ -263,14 +298,14 @@
                 O ramo descendente da circulação de Walker se instala sobre a Amazônia e o
                 norte da América do Sul. Ar que desce não forma nuvem. Ao mesmo tempo, o
                 Atlântico tropical responde com um gradiente que segura a Zona de Convergência
-                Intertropical mais ao norte — e é ela que traz a chuva do semiárido.
+                Intertropical mais ao norte, e é ela que traz a chuva do semiárido.
               </p>
             </div>
             <div style="margin-top:22px">
               <h3 style="font-size:1rem;color:var(--cool)">Caminho extratropical → chuva no Sul</h3>
               <p style="color:var(--ink-2);font-size:0.94rem;margin:6px 0 0">
                 O calor liberado no Pacífico central dispara um trem de ondas atmosféricas
-                que atravessa o Hemisfério Sul — o padrão Pacífico–América do Sul. Ele
+                que atravessa o Hemisfério Sul, o padrão Pacífico–América do Sul. Ele
                 intensifica o jato subtropical sobre o sul do continente, que passa a segurar
                 as frentes frias sobre o Rio Grande do Sul, Santa Catarina e Paraná. A mesma
                 frente que passaria em um dia fica travada e chove por uma semana.
@@ -296,7 +331,7 @@
         <h2 id="h-medir">Como se mede um oceano inteiro</h2>
         <p class="linha-fina">
           Um pedaço do Pacífico com o tamanho do Brasil define o índice que o mundo
-          inteiro acompanha. Ele se chama Niño 3.4 — e o número que sai dele é o ONI.
+          inteiro acompanha. Ele se chama Niño 3.4, e o número que sai dele é o ONI.
         </p>
       </div>
 
@@ -304,15 +339,15 @@
         <div class="prosa">
           <p>
             O <strong>ONI</strong> (<em>Oceanic Niño Index</em>) é a anomalia de temperatura
-            da superfície do mar na região <strong>Niño 3.4</strong> — a faixa entre 5°N e 5°S,
-            de 170°W a 120°W — calculada como média móvel de três meses. Quando o índice fica
+            da superfície do mar na região <strong>Niño 3.4</strong>, a faixa entre 5°N e 5°S,
+            de 170°W a 120°W, calculada como média móvel de três meses. Quando o índice fica
             <strong>igual ou acima de +0,5 °C por cinco trimestres seguidos</strong>, a NOAA
             declara oficialmente um El Niño. Abaixo de −0,5 °C nas mesmas condições, La Niña.
           </p>
           <p>
             A intensidade é classificada pelo pico: <strong>fraco</strong> (0,5 a 0,9 °C),
             <strong>moderado</strong> (1,0 a 1,4), <strong>forte</strong> (1,5 a 1,9) e
-            <strong>muito forte</strong> (2,0 ou mais). Parece pouco — dois graus em uma
+            <strong>muito forte</strong> (2,0 ou mais). Parece pouco: dois graus em uma
             região do oceano. Mas a área é do tamanho de um continente, e cada grau a mais
             despeja na atmosfera uma quantidade de calor e vapor que reorganiza a circulação
             de meio planeta.
@@ -333,7 +368,7 @@
       <p class="nota revela">
         <strong>Sobre os números.</strong> Os valores de ONI aqui reproduzidos vêm da série
         oficial do Climate Prediction Center da NOAA. Para uso científico, consulte sempre
-        a tabela original — o site indica a fonte de cada gráfico e o repositório explica
+        a tabela original. O site indica a fonte de cada gráfico e o repositório explica
         como atualizar os dados.
       </p>
     </div>
@@ -360,8 +395,7 @@
         <span><i class="chave chave--linha" style="background:#3f9ae0"></i>Sinal que resulta em chuva</span>
       </div>
       <p class="figura__rodape" style="border:0;justify-content:flex-start;margin-bottom:46px">
-        Os arcos representam a propagação do sinal atmosférico do Pacífico para o Brasil —
-        são uma representação didática, não trajetórias de ar.
+        Os arcos representam a propagação do sinal atmosférico do Pacífico para o Brasil. São uma representação didática, não trajetórias de ar.
       </p>
 
       <div class="cartao revela" style="margin-bottom:34px">
@@ -392,7 +426,7 @@
         <h2 id="h-caso">2023–24: o El Niño que secou os rios da Amazônia</h2>
         <p class="linha-fina">
           Foi um evento forte, mas não o mais forte já medido. Ainda assim quebrou
-          recordes — porque caiu sobre um planeta que já estava mais quente.
+          recordes, porque caiu sobre um planeta que já estava mais quente.
         </p>
       </div>
 
@@ -406,7 +440,7 @@
             Entre setembro e novembro de 2023, o rio Negro caiu abaixo de qualquer marca
             registrada desde que a régua de Manaus começou a ser lida, em 1902. Balsas
             encalharam, o transporte de grãos pelo Arco Norte foi restringido e centenas de
-            comunidades ribeirinhas — que só se deslocam por água — ficaram sem acesso a
+            comunidades ribeirinhas, que só se deslocam por água, ficaram sem acesso a
             comida, remédio e escola.
           </p>
           <p>
@@ -419,13 +453,13 @@
             Do outro lado do país, o Rio Grande do Sul vivia o extremo oposto. Em setembro
             de 2023 um ciclone extratropical matou 54 pessoas no Vale do Taquari; em maio
             de 2024, já com o El Niño enfraquecendo, veio a maior enchente da história do
-            estado — 478 municípios atingidos e 183 mortes.
+            estado: 478 municípios atingidos e 183 mortes.
           </p>
           <p class="nota" style="margin-bottom:0">
             <strong>Atribuição honesta:</strong> o El Niño não "causou" sozinho cada um desses
             desastres. Ele carregou os dados a favor deles. A enchente de maio de 2024, em
             particular, foi produzida por um bloqueio atmosférico específico sobre um estado
-            já encharcado, num contexto de aquecimento global — o El Niño foi um dos fatores,
+            já encharcado, num contexto de aquecimento global. O El Niño foi um dos fatores,
             não o único.
           </p>
         </div>
@@ -456,7 +490,7 @@
         <h2 id="h-historia">Cinco eventos que mudaram o Brasil</h2>
         <p class="linha-fina">
           A história do El Niño no país é também a história de como aprendemos a
-          enxergá-lo — de uma seca inexplicável no século XIX à previsão com meses de
+          enxergá-lo, de uma seca inexplicável no século XIX à previsão com meses de
           antecedência.
         </p>
       </div>
@@ -489,7 +523,7 @@
         <p>
           A pergunta científica em aberto é se o próprio El Niño está mudando. Vários estudos
           apontam para um <strong>aumento da frequência de eventos extremos</strong> num clima
-          mais quente, mas a incerteza ainda é grande — os modelos concordam menos sobre o ENOS
+          mais quente, mas a incerteza ainda é grande: os modelos concordam menos sobre o ENOS
           do que sobre quase qualquer outro aspecto do clima futuro.
         </p>
         <p>
@@ -507,7 +541,7 @@
     <div class="wrap">
       <div class="cabecalho-secao revela">
         <p class="olho">Capítulo 9</p>
-        <h2 id="h-adaptacao">Dá para se preparar — e o Brasil já sabe como</h2>
+        <h2 id="h-adaptacao">Dá para se preparar, e o Brasil já sabe como</h2>
         <p class="linha-fina">
           A previsão sazonal do ENOS é uma das mais confiáveis da climatologia: dá para
           saber com meses de antecedência. O que falta, quase sempre, é transformar
@@ -521,6 +555,22 @@
     </div>
   </section>
 
+  <!-- ===================== QUIZ ===================== -->
+  <section class="secao secao--escura" id="quiz" aria-labelledby="h-quiz">
+    <div class="wrap wrap--estreito">
+      <div class="cabecalho-secao revela">
+        <p class="olho">Para fechar</p>
+        <h2 id="h-quiz">Teste o que você entendeu</h2>
+        <p class="linha-fina">
+          Oito perguntas sobre o que está nesta página. Cada resposta abre a explicação,
+          esteja ela certa ou errada.
+        </p>
+      </div>
+      <div class="quiz revela" id="quiz-lista"></div>
+      <div class="quiz__placar revela" id="quiz-placar" aria-live="polite" hidden></div>
+    </div>
+  </section>
+
 </main>
 
 <footer class="rodape">
@@ -531,7 +581,7 @@
         <p style="margin:0">
           Material educativo aberto sobre o El Niño e seus efeitos no Brasil. Todo o
           conteúdo, as animações 3D e os gráficos foram construídos sem depender de
-          serviços externos — o site funciona inteiro a partir dos arquivos do repositório.
+          serviços externos: o site funciona inteiro a partir dos arquivos do repositório.
         </p>
       </div>
       <div>
@@ -541,9 +591,9 @@
       <div>
         <h3>Créditos técnicos</h3>
         <ul>
-          <li><cite>three.js</cite> — renderização 3D (licença MIT)</li>
-          <li><cite>Natural Earth</cite> via <code>world-atlas</code> — contornos de terra (domínio público)</li>
-          <li><cite>svg-maps/brazil</cite>, de Victor Cazanave — mapa das unidades da federação (CC BY 4.0)</li>
+          <li><cite>three.js</cite>: renderização 3D (licença MIT)</li>
+          <li><cite>Natural Earth</cite> via <code>world-atlas</code>: contornos de terra (domínio público)</li>
+          <li><cite>svg-maps/brazil</cite>, de Victor Cazanave: mapa das unidades da federação (CC BY 4.0)</li>
           <li>Gráficos em SVG escritos para este projeto, sem bibliotecas</li>
         </ul>
       </div>

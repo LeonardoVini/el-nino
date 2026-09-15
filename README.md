@@ -2,7 +2,7 @@
 
 Site educativo, em português, sobre o El Niño: **como o fenômeno se forma no
 Pacífico, como é medido e o que ele faz com os ecossistemas e as regiões do
-Brasil** — explicado com animações 3D interativas, gráficos e dados.
+Brasil**, explicado com animações 3D interativas, gráficos e dados.
 
 O site é estático e **não depende de nenhum serviço externo**: bibliotecas,
 geodados e conjuntos de dados estão todos no repositório. Nenhuma requisição
@@ -13,7 +13,7 @@ sai para fora enquanto a página roda.
 ## Rodando localmente
 
 O site usa módulos ES e `fetch()` para carregar os geodados, então precisa ser
-servido por HTTP — abrir o `index.html` direto do disco (`file://`) não
+servido por HTTP. Abrir o `index.html` direto do disco (`file://`) não
 funciona.
 
 ```bash
@@ -47,13 +47,13 @@ Daí em diante toda publicação é automática. O endereço é
 
 Alternativa sem workflow nenhum: em **Settings → Pages → Source**, escolha
 **Deploy from a branch**, aponte para a branch e a pasta `/ (root)`. O site é
-estático e o `.nojekyll` já está no repositório, então funciona direto — nesse
+estático e o `.nojekyll` já está no repositório, então funciona direto. Nesse
 caso o workflow fica sobrando e pode ser apagado.
 
 ### Vercel
 
 O [`vercel.json`](vercel.json) já declara a raiz como diretório de saída e os
-cabeçalhos de cache — o `three.js` e os geodados são imutáveis e ficam em cache
+cabeçalhos de cache: o `three.js` e os geodados são imutáveis e ficam em cache
 por um ano.
 
 Pelo painel: **Add New → Project**, importe o repositório, deixe o framework
@@ -83,18 +83,18 @@ npx vercel --prod
 
 ### As três cenas 3D
 
-Construídas em [three.js](https://threejs.org/) sem geometria pré-modelada —
-tudo é gerado por código a partir de funções paramétricas:
+Construídas em [three.js](https://threejs.org/) sem geometria pré-modelada.
+Tudo é gerado por código a partir de funções paramétricas:
 
-1. **Globo (herói)** — planeta com textura desenhada em `<canvas>` a partir dos
+1. **Globo (herói)**: planeta com textura desenhada em `<canvas>` a partir dos
    contornos do Natural Earth, camada de anomalia de temperatura calculada num
    shader e as caixas das regiões Niño.
-2. **Corte do Pacífico** — o explicador principal. Um único número, a *fase*
+2. **Corte do Pacífico**: o explicador principal. Um único número, a *fase*
    (−1 La Niña, 0 neutro, +1 El Niño), controla a inclinação da termoclina, o
    campo de temperatura da água, a força e o sentido dos alísios, a posição da
    convecção, o número de células de Walker e a ressurgência costeira. Trocar de
    fase interpola tudo junto.
-3. **Teleconexão** — globo centrado na América do Sul, com a anomalia do
+3. **Teleconexão**: globo centrado na América do Sul, com a anomalia do
    Pacífico e os arcos pulsantes que ligam o oceano às regiões brasileiras.
 
 Todas as cenas respeitam `prefers-reduced-motion` (desenham um quadro estático
@@ -121,7 +121,7 @@ link "Ver os dados em tabela".
 
 > **Importante.** Os valores foram compilados de boletins e séries publicadas
 > por essas instituições e estão aqui com finalidade educativa. Para uso
-> científico ou operacional, consulte sempre a fonte primária — a tabela
+> científico ou operacional, consulte sempre a fonte primária. A tabela
 > oficial do ONI está em
 > <https://origin.cpc.ncep.noaa.gov/products/analysis_monitoring/ensostuff/ONI_v5.php>.
 

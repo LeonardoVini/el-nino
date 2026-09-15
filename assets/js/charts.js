@@ -1,10 +1,10 @@
 /**
- * Gráficos em SVG — construídos à mão, sem dependências.
+ * Gráficos em SVG, construídos à mão, sem dependências.
  *
  * Convenções seguidas em todos os gráficos:
  *   · marcas finas (barras <= 24 px, linhas de 2 px, pontos >= 8 px);
  *   · grade em fio de cabelo, sólida e discreta;
- *   · rótulos diretos apenas nos extremos — o resto fica no eixo e na dica;
+ *   · rótulos diretos apenas nos extremos; o resto fica no eixo e na dica;
  *   · texto sempre com as cores de tinta, nunca com a cor da série;
  *   · toda figura tem uma tabela equivalente, aberta por <details>;
  *   · a dica de valor complementa, nunca é o único caminho para o número.
@@ -21,7 +21,7 @@ export const fmt1 = num(1);
 export const fmt2 = num(2);
 export const fmt0 = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 });
 
-/** Formata com sinal explícito — essencial em escalas divergentes. */
+/** Formata com sinal explícito, essencial em escalas divergentes. */
 export function comSinal(v, casas = 1, sufixo = '') {
   const f = num(casas).format(Math.abs(v));
   const s = v > 0 ? '+' : v < 0 ? '−' : '';
@@ -234,7 +234,7 @@ function esconderDica(dica) {
 }
 
 /* =========================================================================
- * 1. Colunas divergentes — a série do ONI
+ * 1. Colunas divergentes: a série do ONI
  * ====================================================================== */
 
 export function graficoONI(destino, dados, opcoes = {}) {
@@ -386,7 +386,7 @@ export function graficoONI(destino, dados, opcoes = {}) {
 }
 
 /* =========================================================================
- * 2. Linhas múltiplas — evolução dos maiores eventos
+ * 2. Linhas múltiplas: evolução dos maiores eventos
  * ====================================================================== */
 
 export function graficoEvolucao(destino, series, rotulosX, opcoes = {}) {
@@ -523,7 +523,7 @@ export function graficoEvolucao(destino, series, rotulosX, opcoes = {}) {
 }
 
 /* =========================================================================
- * 3. Barras divergentes — desvio de chuva por região
+ * 3. Barras divergentes: desvio de chuva por região
  * ====================================================================== */
 
 export function graficoRegioes(destino, regioes, ordem, opcoes = {}) {
@@ -646,7 +646,7 @@ export function graficoRegioes(destino, regioes, ordem, opcoes = {}) {
 }
 
 /* =========================================================================
- * 4. Barras horizontais com destaque — ranking de intensidade
+ * 4. Barras horizontais com destaque: ranking de intensidade
  * ====================================================================== */
 
 export function graficoRanking(destino, itens, opcoes = {}) {
@@ -713,7 +713,7 @@ export function graficoRanking(destino, itens, opcoes = {}) {
 }
 
 /* =========================================================================
- * 5. Colunas com ênfase — nível mínimo do rio Negro
+ * 5. Colunas com ênfase: nível mínimo do rio Negro
  * ====================================================================== */
 
 export function graficoRioNegro(destino, dados, opcoes = {}) {
@@ -723,7 +723,7 @@ export function graficoRioNegro(destino, dados, opcoes = {}) {
     titulo: opcoes.titulo ?? 'A régua de Manaus, medida desde 1902',
     subtitulo:
       opcoes.subtitulo ??
-      'Nível mínimo do rio Negro atingido em anos marcantes. Quanto menor a barra, mais grave a seca — os dois menores valores da série inteira são de 2023 e 2024.',
+      'Nível mínimo do rio Negro atingido em anos marcantes. Quanto menor a barra, mais grave a seca. Os dois menores valores da série inteira são de 2023 e 2024.',
     fonte: opcoes.fonte ?? 'Porto de Manaus / SGB-CPRM',
     tabela: {
       legenda: 'Nível mínimo anual do rio Negro no porto de Manaus, em metros.',
@@ -779,7 +779,7 @@ export function graficoRioNegro(destino, dados, opcoes = {}) {
         { class: 'eixo-texto', x: cx + larg / 2, y: h - 24, 'text-anchor': 'middle' },
         svg
       ).textContent = String(d.ano);
-      const fase = d.oni === 'nino' ? 'El Niño' : d.oni === 'nina' ? 'La Niña' : '—';
+      const fase = d.oni === 'nino' ? 'El Niño' : d.oni === 'nina' ? 'La Niña' : 'neutro';
       el(
         'text',
         { class: 'eixo-texto', x: cx + larg / 2, y: h - 8, 'text-anchor': 'middle', opacity: 0.75 },
@@ -812,7 +812,7 @@ export function graficoRioNegro(destino, dados, opcoes = {}) {
 }
 
 /* =========================================================================
- * 6. Matriz de impacto — região x setor
+ * 6. Matriz de impacto: região x setor
  * ====================================================================== */
 
 export function graficoMatriz(destino, matriz, regioes, ordem, opcoes = {}) {
@@ -829,7 +829,7 @@ export function graficoMatriz(destino, matriz, regioes, ordem, opcoes = {}) {
     titulo: opcoes.titulo ?? 'Onde o El Niño dói mais',
     subtitulo:
       opcoes.subtitulo ??
-      'Síntese qualitativa do impacto por setor e região em um evento forte. O Sul é a única parte do país que colhe algum benefício — e ainda assim paga em enchentes.',
+      'Síntese qualitativa do impacto por setor e região em um evento forte. O Sul é a única parte do país que colhe algum benefício, e ainda assim paga em enchentes.',
     fonte: opcoes.fonte ?? 'Síntese a partir de Conab, ONS, Embrapa, Ministério da Saúde e Cemaden',
     tabela: {
       legenda: 'Escala de −3 (impacto severo) a +2 (efeito muito favorável).',
@@ -887,7 +887,7 @@ export function graficoMatriz(destino, matriz, regioes, ordem, opcoes = {}) {
             fill: v <= -2 || v >= 1 ? '#0b1720' : lerToken('--ink-2'),
           },
           svg
-        ).textContent = v === 0 ? '—' : comSinal(v, 0);
+        ).textContent = v === 0 ? '0' : comSinal(v, 0);
 
         const alvo = el(
           'rect',
