@@ -24,8 +24,43 @@ python3 -m http.server 4173      # ou: npm start
 
 Depois abra <http://localhost:4173>.
 
-Para publicar no GitHub Pages, basta apontar as Pages para a branch — o arquivo
-`.nojekyll` já está no lugar e não há etapa de build.
+---
+
+## Publicando
+
+O site é estático e todos os caminhos são relativos, então funciona tanto na
+raiz de um domínio quanto em subpasta (`/el-nino/`). Não existe etapa de build
+em nenhum dos dois caminhos abaixo.
+
+### GitHub Pages
+
+Já está automatizado: o workflow
+[`.github/workflows/pages.yml`](.github/workflows/pages.yml) publica a cada push
+na branch. Ele liga o GitHub Pages sozinho na primeira execução, então não é
+preciso mexer nas configurações do repositório.
+
+O endereço final é `https://<usuário>.github.io/el-nino/`, e aparece no resumo
+da execução em **Actions → Publicar no GitHub Pages**. Para republicar sem fazer
+um push, use **Run workflow** na mesma tela.
+
+Se a organização exigir aprovação para ligar o Pages, basta fazer uma vez em
+**Settings → Pages** e escolher **GitHub Actions** como origem; da segunda
+execução em diante o workflow cuida do resto.
+
+### Vercel
+
+O [`vercel.json`](vercel.json) já declara a raiz como diretório de saída e os
+cabeçalhos de cache — o `three.js` e os geodados são imutáveis e ficam em cache
+por um ano.
+
+Pelo painel: **Add New → Project**, importe o repositório, deixe o framework
+como **Other** e publique. Não preencha comando de build.
+
+Pela linha de comando:
+
+```bash
+npx vercel --prod
+```
 
 ---
 
@@ -107,6 +142,8 @@ npm run build:geo    # regenera os três arquivos em assets/vendor/
 
 ```
 index.html                  página única, todo o texto explicativo
+vercel.json                 configuração de publicação na Vercel
+.github/workflows/pages.yml publicação automática no GitHub Pages
 assets/
   css/style.css             tema oceânico escuro e componentes
   js/

@@ -1,0 +1,49 @@
+# Publica o site no GitHub Pages a cada push.
+#
+# Não há etapa de build: o site é estático e o repositório inteiro é enviado
+# como está. O passo `configure-pages` liga o GitHub Pages sozinho na primeira
+# execução (enablement: true), então não é preciso mexer nas configurações
+# do repositório à mão.
+
+name: Publicar no GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - claude/el-nino-educational-site-85q5rr
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Uma publicação de cada vez; não cancela a que já está em andamento.
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.publicacao.outputs.page_url }}
+    steps:
+      - name: Baixar o repositório
+        uses: actions/checkout@v4
+
+      - name: Preparar o GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Empacotar o site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Publicar
+        id: publicacao
+        uses: actions/deploy-pages@v4
