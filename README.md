@@ -34,18 +34,21 @@ em nenhum dos dois caminhos abaixo.
 
 ### GitHub Pages
 
-Já está automatizado: o workflow
-[`.github/workflows/pages.yml`](.github/workflows/pages.yml) publica a cada push
-na branch. Ele liga o GitHub Pages sozinho na primeira execução, então não é
-preciso mexer nas configurações do repositório.
+O workflow [`.github/workflows/pages.yml`](.github/workflows/pages.yml) publica
+a cada push na branch. Falta **um passo manual, uma única vez**: o token
+automático do Actions não tem permissão para criar o site do Pages, então é
+preciso ligá-lo à mão.
 
-O endereço final é `https://<usuário>.github.io/el-nino/`, e aparece no resumo
-da execução em **Actions → Publicar no GitHub Pages**. Para republicar sem fazer
-um push, use **Run workflow** na mesma tela.
+1. **Settings → Pages → Source**: escolha **GitHub Actions**.
+2. **Actions → Publicar no GitHub Pages → Run workflow**.
 
-Se a organização exigir aprovação para ligar o Pages, basta fazer uma vez em
-**Settings → Pages** e escolher **GitHub Actions** como origem; da segunda
-execução em diante o workflow cuida do resto.
+Daí em diante toda publicação é automática. O endereço é
+`https://<usuário>.github.io/el-nino/` e aparece no resumo da execução.
+
+Alternativa sem workflow nenhum: em **Settings → Pages → Source**, escolha
+**Deploy from a branch**, aponte para a branch e a pasta `/ (root)`. O site é
+estático e o `.nojekyll` já está no repositório, então funciona direto — nesse
+caso o workflow fica sobrando e pode ser apagado.
 
 ### Vercel
 

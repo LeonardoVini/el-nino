@@ -1,9 +1,12 @@
 # Publica o site no GitHub Pages a cada push.
 #
 # Não há etapa de build: o site é estático e o repositório inteiro é enviado
-# como está. O passo `configure-pages` liga o GitHub Pages sozinho na primeira
-# execução (enablement: true), então não é preciso mexer nas configurações
-# do repositório à mão.
+# como está.
+#
+# Antes da primeira execução é preciso abrir Settings -> Pages e escolher
+# "GitHub Actions" em Source. O token automático do Actions costuma não ter
+# permissão para criar o site do Pages sozinho; quando esse é o caso, o passo
+# "Preparar o GitHub Pages" falha com uma mensagem explicando o que fazer.
 
 name: Publicar no GitHub Pages
 
@@ -35,9 +38,22 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Preparar o GitHub Pages
+        id: preparar
+        continue-on-error: true
         uses: actions/configure-pages@v5
         with:
           enablement: true
+
+      - name: Avisar se o Pages ainda não está ligado
+        if: steps.preparar.outcome == 'failure'
+        run: |
+          echo "::error title=GitHub Pages ainda não está ligado neste repositório::\
+          Abra Settings -> Pages e escolha 'GitHub Actions' em Source. \
+          Depois volte em Actions -> Publicar no GitHub Pages -> Run workflow. \
+          O token automático do Actions não tem permissão para criar o site do \
+          Pages por conta própria, então esse passo é manual e só precisa ser \
+          feito uma vez."
+          exit 1
 
       - name: Empacotar o site
         uses: actions/upload-pages-artifact@v3
