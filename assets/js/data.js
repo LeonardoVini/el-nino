@@ -700,3 +700,43 @@ export const perguntasQuiz = [
       'El Niño é o Menino Jesus. Pescadores do norte do Peru notaram, no século XIX, que em certos anos a água quente chegava por volta do Natal e a pescaria sumia. Só muito depois se descobriu que aquilo era a ponta de um fenômeno planetário.',
   },
 ];
+
+/* ===========================================================================
+ * 12. Oferta do material para professores
+ * ------------------------------------------------------------------------ */
+
+/**
+ * ÚNICO LUGAR A EDITAR PARA COLOCAR O PRODUTO NO AR.
+ *
+ * Troque `url` pelo link de checkout da Hotmart, que fica em
+ * Produto > Links de divulgação, e ajuste preço e parcelamento.
+ *
+ * Enquanto o endereço continuar com o texto de exemplo, a seção de venda
+ * simplesmente não aparece no site. É de propósito: melhor não ter seção do
+ * que ter um botão de compra que leva a lugar nenhum.
+ */
+export const oferta = {
+  url: 'https://pay.hotmart.com/TROQUE-PELO-SEU-CODIGO',
+  preco: 'R$ 47',
+  parcelamento: 'ou 3x sem juros',
+  titulo: 'Este site é a aula. O kit é como dar essa aula.',
+  chamada:
+    'Tudo o que está aqui continua livre e sem custo. O que se paga é o tempo ' +
+    'de preparação que o kit devolve: plano minutado, slides prontos, ficha ' +
+    'para fotocopiar e prova com gabarito comentado.',
+  itens: [
+    'Dois planos de aula de 50 minutos, com passo a passo minutado e os erros que a turma costuma cometer',
+    '20 slides em PDF widescreen, prontos para projetar',
+    'Roteiro de atividade prática com o simulador 3D desta página',
+    'Ficha do aluno e mapa mudo do Brasil, liberados para fotocopiar',
+    '15 questões, sendo 12 de múltipla escolha no estilo ENEM',
+    'Gabarito comentado, explicando o erro típico de cada alternativa',
+    'De bônus, o guia completo de 35 páginas com os 9 infográficos',
+  ],
+  rodape:
+    'Pagamento e nota fiscal pela Hotmart. Arquivos em PDF, para baixar na hora. ' +
+    'Uso liberado em todas as suas turmas.',
+};
+
+/** A seção só entra no ar depois que o endereço de verdade for colocado. */
+export const ofertaPronta = () => !oferta.url.includes('TROQUE-PELO-SEU-CODIGO');

@@ -375,6 +375,46 @@ function montarReferencias() {
 }
 
 /* =========================================================================
+ * Oferta do kit para professores
+ * ====================================================================== */
+
+function montarOferta() {
+  const secao = $('#kit');
+  if (!secao) return;
+
+  if (!dados.ofertaPronta()) {
+    console.info(
+      'Seção do kit oculta: o endereço de checkout ainda é o de exemplo. ' +
+        'Edite `oferta.url` em assets/js/data.js para publicá-la.'
+    );
+    return;
+  }
+
+  const o = dados.oferta;
+  $('#h-kit').textContent = o.titulo;
+  $('.oferta__chamada', secao).textContent = o.chamada;
+
+  const lista = $('.oferta__itens', secao);
+  for (const item of o.itens) elemento('li', null, lista, item);
+
+  const botao = $('.oferta__botao', secao);
+  botao.href = o.url;
+  botao.textContent = `Quero o kit por ${o.preco}`;
+
+  $('.oferta__preco', secao).textContent = o.parcelamento;
+  $('.oferta__rodape', secao).textContent = o.rodape;
+
+  secao.hidden = false;
+
+  // o item de navegação só aparece junto com a seção
+  const nav = $('.nav');
+  if (nav && !$('.nav a[href="#kit"]')) {
+    const a = elemento('a', null, nav, 'Para professores');
+    a.href = '#kit';
+  }
+}
+
+/* =========================================================================
  * Quiz
  * ====================================================================== */
 
@@ -654,6 +694,7 @@ function iniciar() {
   montarMapa();
   ligarSimulador();
   montarQuiz();
+  montarOferta();
   ligarEtapas();
   ligarRevelacao();
   montarCenas().catch((e) => console.error('cenas 3D:', e));

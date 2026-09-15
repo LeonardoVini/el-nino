@@ -1998,3 +1998,136 @@ table.dados tbody tr:last-child td {
   .topo, .palco, .hero__palco { display: none; }
   body { background: #fff; color: #000; }
 }
+
+/* --- Oferta do kit para professores ------------------------------------- */
+
+.oferta {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: clamp(28px, 5vw, 64px);
+  align-items: center;
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: clamp(26px, 4vw, 48px);
+}
+
+.oferta h2 {
+  font-size: clamp(1.6rem, 3.2vw, 2.3rem);
+  margin-bottom: 14px;
+}
+
+.oferta__chamada {
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 54ch;
+}
+
+.oferta__itens {
+  margin-top: 22px;
+}
+
+.oferta__acao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 18px;
+  margin-top: 28px;
+}
+
+.oferta__preco {
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.oferta__rodape {
+  margin: 16px 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+  max-width: 52ch;
+  line-height: 1.55;
+}
+
+/* pilha de PDF, só decorativa */
+
+.oferta__pilha {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  margin-top: 70px;
+  max-width: 300px;
+  justify-self: center;
+  width: 100%;
+}
+
+.oferta__pdf {
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  border: 1px solid var(--hairline-strong);
+  background: linear-gradient(160deg, var(--surface-3), var(--surface-2));
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.42);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
+  padding: 8px 18px 18px;
+  font-size: 0.74rem;
+  color: var(--muted);
+  transform-origin: bottom center;
+}
+
+/* Nas cartas de trás o rótulo sobe para a faixa que fica à mostra;
+   se ficasse embaixo, a carta da frente cobriria. */
+.oferta__pdf--2,
+.oferta__pdf--3 {
+  justify-content: flex-start;
+}
+
+.oferta__pdf i {
+  font-style: normal;
+  display: block;
+}
+
+.oferta__pdf--2 b,
+.oferta__pdf--3 b {
+  font-size: 0.92rem;
+  line-height: 1.15;
+}
+
+.oferta__pdf--2 i,
+.oferta__pdf--3 i {
+  font-size: 0.68rem;
+}
+
+.oferta__pdf b {
+  display: block;
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.oferta__pdf--3 { transform: rotate(-6deg) translateY(-70px); opacity: 0.74; }
+.oferta__pdf--2 { transform: rotate(-3deg) translateY(-35px); opacity: 0.88; }
+.oferta__pdf--1 { border-color: var(--accent); }
+
+.oferta__pdf--1::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--accent);
+  border-radius: 6px 0 0 6px;
+}
+
+@media (max-width: 820px) {
+  .oferta {
+    grid-template-columns: 1fr;
+  }
+
+  .oferta__pilha {
+    order: -1;
+    max-width: 210px;
+  }
+}

@@ -192,10 +192,16 @@ do projeto serve para regenerar os geodados.
 
 | Componente | Origem | Licença |
 |---|---|---|
-| Código e textos do site | este repositório | MIT (código) · CC BY 4.0 (conteúdo) |
+| Código do site | este repositório | MIT |
+| Texto e ilustrações do site | este repositório | CC BY-NC-SA 4.0 |
 | [three.js](https://threejs.org/) | mrdoob e colaboradores | MIT |
 | Contornos de terra e do Brasil | [Natural Earth](https://www.naturalearthdata.com/) via `world-atlas` | domínio público |
 | Mapa das unidades da federação | [svg-maps/brazil](https://github.com/VictorCazanave/svg-maps), de Victor Cazanave | CC BY 4.0 |
 
 Os dados citados nos gráficos pertencem às instituições indicadas em cada
 figura e são reproduzidos aqui com finalidade educativa.
+
+O código é MIT: use, modifique e redistribua à vontade, inclusive
+comercialmente. O texto e as ilustrações são CC BY-NC-SA 4.0, o que libera
+cópia, adaptação e uso em sala de aula com atribuição, mas não a revenda.
+A distinção existe porque há material didático pago derivado deste conteúdo.
