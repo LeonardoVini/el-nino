@@ -1,0 +1,468 @@
+/**
+ * Ponto de entrada: monta os componentes, liga as cenas 3D aos controles de
+ * fase e injeta o conteúdo que vem de `data.js`.
+ */
+
+import * as dados from './data.js';
+import {
+  graficoONI, graficoEvolucao, graficoRegioes, graficoRanking, graficoRioNegro,
+  graficoMatriz, comSinal, fmt1,
+} from './charts.js';
+import { criarMapaBrasil, corAnomalia, FAIXAS_LEGENDA } from './brasil-map.js';
+
+const $ = (s, raiz = document) => raiz.querySelector(s);
+const $$ = (s, raiz = document) => [...raiz.querySelectorAll(s)];
+
+const token = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function elemento(tag, cls, pai, texto) {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (texto !== undefined) n.textContent = texto;
+  pai?.appendChild(n);
+  return n;
+}
+
+/* =========================================================================
+ * Navegação, progresso e revelação
+ * ====================================================================== */
+
+function ligarNavegacao() {
+  const topo = $('#topo');
+  const progresso = $('#progresso');
+  const links = $$('.nav a');
+  const secoes = links
+    .map((a) => document.getElementById(a.getAttribute('href').slice(1)))
+    .filter(Boolean);
+
+  let pendente = false;
+  const aoRolar = () => {
+    if (pendente) return;
+    pendente = true;
+    requestAnimationFrame(() => {
+      pendente = false;
+      const y = window.scrollY;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      progresso.style.setProperty('--p', `${total > 0 ? (y / total) * 100 : 0}%`);
+      topo.dataset.rolado = String(y > 20);
+    });
+  };
+  window.addEventListener('scroll', aoRolar, { passive: true });
+  aoRolar();
+
+  const observador = new IntersectionObserver(
+    (entradas) => {
+      for (const e of entradas) {
+        if (!e.isIntersecting) continue;
+        const i = secoes.indexOf(e.target);
+        links.forEach((a, j) => a.setAttribute('aria-current', String(j === i)));
+      }
+    },
+    { rootMargin: '-45% 0px -50% 0px' }
+  );
+  secoes.forEach((s) => observador.observe(s));
+}
+
+function ligarRevelacao() {
+  const alvos = $$('.revela');
+  if (!('IntersectionObserver' in window)) {
+    alvos.forEach((a) => (a.dataset.visivel = 'true'));
+    return;
+  }
+
+  const pendentes = new Set(alvos);
+
+  const revelar = (alvo) => {
+    alvo.dataset.visivel = 'true';
+    pendentes.delete(alvo);
+    obs.unobserve(alvo);
+  };
+
+  const obs = new IntersectionObserver(
+    (entradas) => {
+      for (const e of entradas) if (e.isIntersecting) revelar(e.target);
+    },
+    { rootMargin: '0px 0px -8% 0px', threshold: 0.06 }
+  );
+  alvos.forEach((a) => obs.observe(a));
+
+  /**
+   * Uma rolagem muito rápida pode levar um elemento de baixo da dobra para
+   * cima dela entre dois cálculos do observador — que então nunca reporta
+   * interseção e o bloco fica invisível. Esta varredura, que só percorre o
+   * que ainda falta revelar, fecha essa brecha.
+   */
+  let agendado = false;
+  const varrer = () => {
+    agendado = false;
+    if (!pendentes.size) {
+      window.removeEventListener('scroll', aoRolar);
+      return;
+    }
+    const limite = window.innerHeight * 0.92;
+    for (const alvo of [...pendentes]) {
+      if (alvo.getBoundingClientRect().top < limite) revelar(alvo);
+    }
+  };
+  const aoRolar = () => {
+    if (agendado) return;
+    agendado = true;
+    requestAnimationFrame(varrer);
+  };
+  window.addEventListener('scroll', aoRolar, { passive: true });
+  varrer();
+}
+
+function ligarEtapas() {
+  const etapas = $$('#etapas-mecanismo .etapa');
+  if (!etapas.length) return;
+  const obs = new IntersectionObserver(
+    (entradas) => {
+      for (const e of entradas) e.target.dataset.ativa = String(e.isIntersecting);
+    },
+    { rootMargin: '-40% 0px -40% 0px' }
+  );
+  etapas.forEach((e) => obs.observe(e));
+}
+
+/* =========================================================================
+ * Controles de fase
+ * ====================================================================== */
+
+const VALOR_FASE = { nina: -1, neutro: 0, nino: 1 };
+
+const TEXTO_FASE = {
+  nina:
+    'La Niña: os alísios sopram ainda mais forte, a termoclina fica quase encostada na ' +
+    'superfície no leste e a ressurgência traz água fria com força total. A chuva se ' +
+    'concentra sobre a Indonésia.',
+  neutro:
+    'Estado neutro: os alísios sopram firme para oeste e a termoclina fica bem inclinada, ' +
+    'rasa no leste e profunda no oeste.',
+  nino:
+    'El Niño: os alísios afrouxam e chegam a inverter no oeste, a termoclina se nivela, ' +
+    'a ressurgência desliga e a convecção se muda para o meio do Pacífico — com ar ' +
+    'descendo sobre a Indonésia e sobre o norte da América do Sul.',
+};
+
+function ligarFases(grupo, aplicar, legenda) {
+  const botoes = $$('button', grupo);
+  botoes.forEach((b) => {
+    b.addEventListener('click', () => {
+      botoes.forEach((o) => o.setAttribute('aria-pressed', String(o === b)));
+      const fase = b.dataset.fase;
+      aplicar(VALOR_FASE[fase]);
+      if (legenda) legenda.textContent = TEXTO_FASE[fase];
+    });
+  });
+}
+
+/* =========================================================================
+ * Conteúdo vindo dos dados
+ * ====================================================================== */
+
+function montarIndicadores() {
+  const destino = $('#indicadores-2324');
+  for (const ind of dados.indicadores2324) {
+    const cartao = elemento('div', 'indicador revela', destino);
+    const valor = elemento('div', 'indicador__valor', cartao, ind.valor);
+    const unidade = elemento('span', 'indicador__unidade', null, ind.unidade);
+    valor.appendChild(unidade);
+    elemento('div', 'indicador__rotulo', cartao, ind.rotulo);
+    elemento('div', 'indicador__detalhe', cartao, ind.detalhe);
+    elemento('div', 'indicador__fonte', cartao, ind.fonte);
+  }
+}
+
+const ICONES = {
+  floresta: 'M12 3l4.5 6h-3l4 5.5h-3.5L18 20H6l4-5.5H6.5l4-5.5h-3L12 3zM12 20v2',
+  seca: 'M4 17h16M6 20h12M12 4v7M9 7l3-3 3 3M5 12l2 2M19 12l-2 2',
+  coral: 'M7 21c0-5 1-7 1-11M12 21c0-7 0-9 2-13M17 21c0-4-.5-6-1.5-9M4 21h16',
+  peixe: 'M3 12c3-4 7-5 10-5s6 2 8 5c-2 3-5 5-8 5s-7-1-10-5zM17 11h.01M3 12l-1-3m1 3l-1 3',
+  fogo: 'M12 21c3.3 0 6-2.5 6-5.5 0-4-4-5.5-4-9.5-3 1.5-4 4-4 6 0-1-1-2-2-2.5C7 11 6 13 6 15.5 6 18.5 8.7 21 12 21z',
+  chuva: 'M7 15a4 4 0 010-8 5.5 5.5 0 0110.5 1.5A3.5 3.5 0 0117 15H7zM8 18l-1 3M12 18l-1 3M16 18l-1 3',
+};
+
+function montarEcossistemas() {
+  const destino = $('#cartoes-eco');
+  for (const eco of dados.ecossistemas) {
+    const cartao = elemento('article', 'cartao eco revela', destino);
+    const icone = elemento('div', 'eco__icone', cartao);
+    icone.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${ICONES[eco.icone]}"/></svg>`;
+    const cab = elemento('div', null, cartao);
+    elemento('div', 'eco__chamada', cab, eco.chamada);
+    const h = elemento('h3', null, cab, eco.nome);
+    h.style.marginTop = '4px';
+    elemento('p', null, cartao, eco.texto);
+    const dl = elemento('dl', 'eco__dados', cartao);
+    for (const [rotulo, valor] of eco.dados) {
+      const linha = elemento('div', null, dl);
+      elemento('dt', null, linha, rotulo);
+      elemento('dd', null, linha, valor);
+    }
+    elemento('p', 'eco__fonte', cartao, `Fonte: ${eco.fonte}`);
+  }
+}
+
+function montarLinhaDoTempo() {
+  const destino = $('#linha-do-tempo');
+  for (const item of dados.linhaDoTempo) {
+    const bloco = elemento('article', 'tempo__item revela', destino);
+    elemento('div', 'tempo__ponto', bloco);
+    const corpo = elemento('div', null, bloco);
+    const cabeca = elemento('div', null, corpo);
+    elemento('span', 'tempo__periodo', cabeca, item.periodo);
+    if (item.oni) {
+      elemento('span', 'tempo__oni', cabeca, `pico do ONI ${comSinal(item.oni, 1)} °C`);
+    }
+    elemento('h3', null, corpo, item.titulo);
+    elemento('p', null, corpo, item.texto);
+    const tags = elemento('div', 'tags', corpo);
+    for (const t of item.tags) elemento('span', 'tag', tags, t);
+  }
+}
+
+function montarInstrumentos() {
+  const destino = $('#instrumentos');
+  for (const i of dados.instrumentos) {
+    const bloco = elemento('div', 'instrumento', destino);
+    elemento('div', 'instrumento__desde', bloco, i.desde);
+    const corpo = elemento('div', null, bloco);
+    elemento('h3', null, corpo, i.nome);
+    elemento('p', null, corpo, i.texto);
+  }
+}
+
+function montarAdaptacao() {
+  const destino = $('#adaptacao-grade');
+  for (const bloco of dados.adaptacao) {
+    const cartao = elemento('div', 'cartao revela', destino);
+    const cab = elemento('div', 'prazo__titulo', cartao);
+    elemento('span', 'prazo__quando', cab, bloco.prazo);
+    const h = elemento('h3', null, cartao, bloco.titulo);
+    h.style.fontSize = '1.05rem';
+    const lista = elemento('ul', 'lista-impactos', cartao);
+    for (const item of bloco.itens) elemento('li', null, lista, item);
+  }
+}
+
+function montarOrgaos() {
+  const destino = $('#lista-orgaos');
+  for (const o of dados.orgaos) {
+    const li = elemento('li', null, destino);
+    const a = elemento('a', null, li);
+    a.href = o.url;
+    a.rel = 'noopener';
+    a.target = '_blank';
+    elemento('strong', null, a, o.sigla);
+    elemento('span', null, a, o.papel);
+  }
+}
+
+function montarReferencias() {
+  const destino = $('#referencias');
+  for (const r of dados.referencias) {
+    const li = elemento('li', null, destino);
+    elemento('cite', null, li, r.autor);
+    const a = elemento('a', null, li, r.titulo);
+    a.href = r.url;
+    a.rel = 'noopener';
+    a.target = '_blank';
+  }
+}
+
+/* =========================================================================
+ * Mapa do Brasil + painel de região
+ * ====================================================================== */
+
+function textoEtiqueta(r) {
+  if (r.chuva <= -18) return ['Chuva bem abaixo da média', 'etiqueta--seca'];
+  if (r.chuva <= -8) return ['Tendência de chuva abaixo da média', 'etiqueta--seca'];
+  if (r.chuva >= 18) return ['Chuva bem acima da média', 'etiqueta--chuva'];
+  if (r.chuva >= 8) return ['Tendência de chuva acima da média', 'etiqueta--chuva'];
+  return ['Sinal fraco na chuva', 'etiqueta--misto'];
+}
+
+function pintarPainel(chave) {
+  const painel = $('#painel-regiao');
+  painel.textContent = '';
+
+  if (!chave) {
+    elemento('h3', null, painel, 'Escolha uma região');
+    const p = elemento('p', null, painel,
+      'Passe o ponteiro pelo mapa ou use os botões abaixo para ver o desvio de chuva ' +
+      'e de temperatura típico de cada região durante um El Niño forte, e a lista de ' +
+      'impactos observados.');
+    p.style.color = 'var(--ink-2)';
+    return;
+  }
+
+  const r = dados.regioesBrasil[chave];
+  const [etiqueta, classe] = textoEtiqueta(r);
+
+  const h = elemento('h3', null, painel);
+  elemento('span', null, h, `Região ${r.nome}`);
+  elemento('span', `etiqueta ${classe}`, h, etiqueta);
+
+  const resumo = elemento('p', null, painel, r.resumo);
+  resumo.style.color = 'var(--ink-2)';
+  resumo.style.marginTop = '12px';
+
+  const medidas = elemento('div', 'medidas', painel);
+  const bloco = (rotulo, valor, faixa) => {
+    const m = elemento('div', 'medida', medidas);
+    elemento('div', 'medida__rotulo', m, rotulo);
+    elemento('div', 'medida__valor', m, valor);
+    elemento('div', 'medida__faixa', m, faixa);
+  };
+  bloco('Chuva', `${comSinal(r.chuva, 0)}%`,
+    `entre ${comSinal(r.chuvaFaixa[0], 0)}% e ${comSinal(r.chuvaFaixa[1], 0)}%`);
+  bloco('Temperatura', `${comSinal(r.temperatura, 1)} °C`, 'acima da média climatológica');
+  bloco('Período crítico', r.estacao.split('(')[0].trim(), r.estacao.includes('(') ? r.estacao.split('(')[1].replace(')', '') : 'ao longo do ano');
+  bloco('Confiança do sinal', r.confianca, r.confianca === 'alta' ? 'padrão consistente entre eventos' : 'varia muito de evento para evento');
+
+  const lista = elemento('ul', 'lista-impactos', painel);
+  for (const i of r.impactos) elemento('li', null, lista, i);
+}
+
+function montarLegendaMapa() {
+  const destino = $('#legenda-mapa');
+  for (const f of FAIXAS_LEGENDA) {
+    const item = elemento('span', 'legenda__item', destino);
+    const chave = elemento('span', 'chave', item);
+    chave.style.background = token(f.cor);
+    elemento('span', null, item, f.rotulo);
+  }
+}
+
+async function montarMapa() {
+  const hospedeiro = $('#mapa-brasil');
+  const botoes = $('#botoes-regiao');
+
+  let mapa = null;
+  const definirBotoes = (chave) => {
+    for (const b of $$('button', botoes)) {
+      b.setAttribute('aria-pressed', String(b.dataset.regiao === chave));
+    }
+  };
+
+  for (const chaveRegiao of dados.ordemRegioes) {
+    const r = dados.regioesBrasil[chaveRegiao];
+    const b = elemento('button', null, botoes);
+    b.type = 'button';
+    b.dataset.regiao = chaveRegiao;
+    b.setAttribute('aria-pressed', 'false');
+    const chave = elemento('span', 'chave', b);
+    chave.style.background = corAnomalia(r.chuva);
+    chave.setAttribute('aria-hidden', 'true');
+    elemento('span', null, b, r.nome);
+    b.addEventListener('click', () => {
+      const nova = mapa?.selecionada === chaveRegiao ? null : chaveRegiao;
+      mapa?.selecionar(nova);
+      definirBotoes(nova);
+    });
+  }
+
+  pintarPainel(null);
+  montarLegendaMapa();
+
+  try {
+    mapa = await criarMapaBrasil(hospedeiro, dados.regioesBrasil, dados.ordemRegioes, (chave, passagem) => {
+      pintarPainel(chave);
+      if (!passagem) definirBotoes(chave);
+    });
+  } catch (erro) {
+    console.error('Não foi possível carregar o mapa do Brasil:', erro);
+    const aviso = elemento('p', null, hospedeiro,
+      'O mapa não pôde ser carregado. Os números por região continuam disponíveis nos botões e no gráfico abaixo.');
+    aviso.style.color = 'var(--muted)';
+  }
+}
+
+/* =========================================================================
+ * Gráficos
+ * ====================================================================== */
+
+function montarGraficos() {
+  graficoONI($('#grafico-oni'), dados.oniDJF, { fonte: dados.oniDJFMeta.fonte });
+  graficoEvolucao($('#grafico-evolucao'), dados.eventosEvolucao, dados.trimestres);
+  graficoRanking($('#grafico-ranking'), dados.eventosRanking);
+  graficoRegioes($('#grafico-regioes'), dados.regioesBrasil, dados.ordemRegioes);
+  graficoMatriz($('#grafico-matriz'), dados.matrizImpacto, dados.regioesBrasil, dados.ordemRegioes);
+  graficoRioNegro($('#grafico-rio-negro'), dados.rioNegro, { fonte: dados.rioNegroMeta.fonte });
+}
+
+/* =========================================================================
+ * Cenas 3D — carregadas sob demanda
+ * ====================================================================== */
+
+async function montarCenas() {
+  const { temWebGL, avisoSemWebGL } = await import('./scenes/runtime.js');
+
+  const alvos = [$('#palco-globo'), $('#palco-pacifico'), $('#palco-teleconexao')].filter(Boolean);
+
+  if (!temWebGL()) {
+    for (const alvo of alvos) {
+      avisoSemWebGL(alvo, 'Seu navegador não tem WebGL disponível. O texto, os gráficos e o mapa continuam funcionando.');
+    }
+    return;
+  }
+
+  const { criarGlobo } = await import('./scenes/globo.js');
+  const { criarPacifico } = await import('./scenes/pacifico.js');
+
+  // --- herói: globo do mundo ---
+  criarGlobo($('#palco-globo'), {
+    modo: 'mundo',
+    fase: 1,
+    caixas: dados.regioesNino,
+  }).catch((e) => console.error('globo do herói:', e));
+
+  // --- corte do Pacífico ---
+  const pacifico = criarPacifico($('#palco-pacifico'), { fase: 0 });
+  ligarFases($('[data-fases="pacifico"]'), (v) => pacifico.definirFase(v), $('#legenda-pacifico'));
+
+  const dica = $('#dica-pacifico');
+  $('#palco-pacifico').addEventListener('pointerdown', () => {
+    if (dica) dica.style.opacity = '0';
+  }, { once: true });
+
+  // --- teleconexão até o Brasil ---
+  const quente = token('--warm');
+  const frio = token('--cool');
+  criarGlobo($('#palco-teleconexao'), {
+    modo: 'teleconexao',
+    fase: 1,
+    arcos: [
+      { de: [0, -150], para: [-4, -62], cor: quente, atraso: 0, rotulo: 'Amazônia: seca', classe: 'rotulo-3d--seca' },
+      { de: [0, -150], para: [-8, -40], cor: quente, atraso: 0.33, rotulo: 'Nordeste: seca', classe: 'rotulo-3d--seca' },
+      { de: [-10, -140], para: [-29, -53], cor: frio, atraso: 0.66, rotulo: 'Sul: chuva', classe: 'rotulo-3d--chuva' },
+    ],
+  }).catch((e) => console.error('globo de teleconexão:', e));
+}
+
+/* =========================================================================
+ * Início
+ * ====================================================================== */
+
+function iniciar() {
+  ligarNavegacao();
+  montarIndicadores();
+  montarEcossistemas();
+  montarLinhaDoTempo();
+  montarInstrumentos();
+  montarAdaptacao();
+  montarOrgaos();
+  montarReferencias();
+  montarGraficos();
+  montarMapa();
+  ligarEtapas();
+  ligarRevelacao();
+  montarCenas().catch((e) => console.error('cenas 3D:', e));
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', iniciar);
+} else {
+  iniciar();
+}
