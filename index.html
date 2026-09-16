@@ -35,11 +35,51 @@
       <a href="#ecossistemas">Ecossistemas</a>
       <a href="#historia">História</a>
       <a href="#adaptacao">O que fazer</a>
+      <a href="#mitos">Mitos</a>
       <a href="#quiz">Quiz</a>
     </nav>
+    <button type="button" class="botao-indice" id="abrir-indice"
+            aria-expanded="false" aria-controls="sumario">
+      <span class="botao-indice__barras" aria-hidden="true"></span>
+      <span>Índice</span>
+    </button>
   </div>
   <div class="progresso" id="progresso" role="presentation"></div>
 </header>
+
+<!-- ===================== SUMÁRIO LATERAL ===================== -->
+<div class="sumario__fundo" id="sumario-fundo" hidden></div>
+<aside class="sumario" id="sumario" aria-label="Índice e preferências de leitura" hidden>
+  <div class="sumario__cabeca">
+    <h2>Índice</h2>
+    <button type="button" class="sumario__fechar" id="fechar-indice" aria-label="Fechar o índice">×</button>
+  </div>
+
+  <nav class="sumario__lista" id="sumario-lista" aria-label="Capítulos"></nav>
+
+  <div class="sumario__bloco">
+    <h3>Como você quer ler</h3>
+    <div class="niveis" role="group" aria-label="Nível de detalhe do texto">
+      <button type="button" data-nivel="essencial" aria-pressed="false">Essencial</button>
+      <button type="button" data-nivel="completo" aria-pressed="true">Completo</button>
+    </div>
+    <p class="sumario__ajuda" id="ajuda-nivel">
+      No essencial ficam o resumo de cada capítulo, o texto principal e as
+      visualizações. Saem de cena as caixas laterais, as notas de leitura das
+      figuras e os trechos de aprofundamento — seis blocos ao todo. As ressalvas
+      sobre incerteza continuam onde estão: elas fazem parte do essencial.
+    </p>
+  </div>
+
+  <div class="sumario__bloco">
+    <h3>Levar para a sala de aula</h3>
+    <button type="button" class="botao botao--largo" id="imprimir-ficha">Imprimir a ficha de estudo</button>
+    <p class="sumario__ajuda">
+      Duas páginas com o resumo de todos os capítulos, o glossário e o quiz em
+      branco, para fotocopiar ou salvar em PDF.
+    </p>
+  </div>
+</aside>
 
 <main id="conteudo">
 
@@ -81,6 +121,7 @@
           mecanismo acoplado, e o El Niño é o que acontece quando ele muda de marcha.
         </p>
       </div>
+      <div class="resumo revela" data-resumo="o-que-e"></div>
 
       <div class="grade grade--2">
         <div class="prosa revela">
@@ -114,7 +155,7 @@
           </p>
         </div>
 
-        <aside class="cartao revela">
+        <aside class="cartao revela" data-aprofunda>
           <h3>Por que "El Niño"?</h3>
           <p style="color:var(--ink-2)">
             Pescadores do norte do Peru notaram, no século XIX, que em alguns anos a água
@@ -147,6 +188,7 @@
           </div>
         </aside>
       </div>
+      <div class="checagem-alvo" data-checagem="o-que-e"></div>
     </div>
   </section>
 
@@ -162,6 +204,7 @@
           chuva, a força dos alísios e a ressurgência na costa peruana.
         </p>
       </div>
+      <div class="resumo revela" data-resumo="como-ocorre"></div>
 
       <div class="simulador revela">
         <div class="simulador__cabeca">
@@ -206,10 +249,33 @@
         <span><i class="chave" style="background:#9fe8de"></i>Alísios</span>
         <span><i class="chave" style="background:#bfe1ff"></i>Circulação de Walker</span>
       </div>
-      <p class="figura__rodape" style="border:0;justify-content:flex-start">
+      <p class="figura__rodape" style="border:0;justify-content:flex-start" data-aprofunda>
         Esquema conceitual, com profundidade e relevo exagerados para leitura. A termoclina real
         fica entre cerca de 50 m (leste) e 150 m (oeste) de profundidade.
       </p>
+
+      <div class="comparar revela">
+        <button type="button" class="botao" id="abrir-comparacao" aria-expanded="false" aria-controls="comparacao">
+          Comparar lado a lado: neutro × El Niño forte
+        </button>
+        <p class="comparar__ajuda">
+          Arrastar o controle mostra a mudança, mas exige lembrar do estado anterior.
+          Aqui os dois estados ficam na tela ao mesmo tempo.
+        </p>
+      </div>
+
+      <div class="comparacao" id="comparacao" hidden>
+        <figure class="comparacao__lado">
+          <figcaption><strong>Neutro</strong><span>ONI 0,0 °C</span></figcaption>
+          <div class="palco palco--curto" id="palco-comparar-neutro"></div>
+          <p>Termoclina bem inclinada, alísios firmes para oeste, água fria encostando na superfície do lado do Peru e chuva concentrada sobre a Indonésia.</p>
+        </figure>
+        <figure class="comparacao__lado">
+          <figcaption><strong>El Niño forte</strong><span>ONI +2,0 °C</span></figcaption>
+          <div class="palco palco--curto" id="palco-comparar-nino"></div>
+          <p>Termoclina quase plana, alísios curtos, superfície quente de ponta a ponta e a chuva instalada no meio do oceano.</p>
+        </figure>
+      </div>
 
       <div class="cartao revela projecao" style="margin-top:28px">
         <h3>E o que isso faria com o Brasil</h3>
@@ -232,56 +298,11 @@
       <div class="grade grade--2" style="margin-top:44px">
         <div class="revela">
           <h3 style="margin-bottom:18px">A realimentação que faz o evento crescer sozinho</h3>
-          <div class="etapas" id="etapas-mecanismo">
-            <div class="etapa">
-              <div>
-                <h3>Algo enfraquece os alísios</h3>
-                <p>Basta um empurrão: uma sequência de rajadas de oeste no Pacífico
-                  ocidental, muitas vezes ligadas à oscilação de Madden-Julian. O sistema
-                  sai do equilíbrio.</p>
-              </div>
-            </div>
-            <div class="etapa">
-              <div>
-                <h3>Uma onda oceânica atravessa o Pacífico</h3>
-                <p>O empurrão gera uma onda de Kelvin equatorial, um pulso invisível na
-                  superfície que leva de dois a três meses para cruzar o oceano, afundando
-                  a termoclina por onde passa.</p>
-              </div>
-            </div>
-            <div class="etapa">
-              <div>
-                <h3>A ressurgência deixa de funcionar</h3>
-                <p>Com a termoclina afundada no leste, a água que sobe na costa do Peru
-                  não vem mais da camada fria, e sim de água já morna. A superfície esquenta
-                  rápido.</p>
-              </div>
-            </div>
-            <div class="etapa">
-              <div>
-                <h3>A chuva muda de endereço</h3>
-                <p>A convecção profunda segue o mar quente e se instala no Pacífico central.
-                  A circulação de Walker se parte e passa a descer sobre a Indonésia
-                  <em>e</em> sobre o norte da América do Sul.</p>
-              </div>
-            </div>
-            <div class="etapa">
-              <div>
-                <h3>O ciclo se retroalimenta</h3>
-                <p>Convecção deslocada para o centro do oceano enfraquece ainda mais os
-                  alísios, o que aquece ainda mais o leste. É a realimentação de Bjerknes:
-                  a causa vira consequência e o evento se amplifica.</p>
-              </div>
-            </div>
-            <div class="etapa">
-              <div>
-                <h3>O pico e a descarga</h3>
-                <p>Entre novembro e janeiro o evento atinge o máximo. Ondas de Rossby
-                  refletidas na borda oeste já vêm trazendo água fria de volta, e o sistema
-                  costuma passar do ponto, virando La Niña no ano seguinte.</p>
-              </div>
-            </div>
-          </div>
+          <p class="etapas__dica">
+            Clique em uma etapa para levar a cena do Pacífico, acima, ao estágio
+            correspondente e ver o que muda.
+          </p>
+          <ol class="etapas" id="etapas-mecanismo"></ol>
         </div>
 
         <div class="revela">
@@ -311,7 +332,7 @@
                 frente que passaria em um dia fica travada e chove por uma semana.
               </p>
             </div>
-            <p class="nota" style="margin-bottom:0">
+            <p class="nota" style="margin-bottom:0" data-aprofunda>
               <strong>Nem todo El Niño é igual.</strong> Eventos com o aquecimento concentrado
               no Pacífico central (chamados de <em>El Niño Modoki</em>) produzem padrões
               diferentes dos eventos com aquecimento no leste. Por isso a previsão fala em
@@ -320,6 +341,7 @@
           </div>
         </div>
       </div>
+      <div class="checagem-alvo" data-checagem="como-ocorre"></div>
     </div>
   </section>
 
@@ -334,6 +356,7 @@
           inteiro acompanha. Ele se chama Niño 3.4, e o número que sai dele é o ONI.
         </p>
       </div>
+      <div class="resumo revela" data-resumo="medir"></div>
 
       <div class="grade grade--2 revela" style="margin-bottom:40px">
         <div class="prosa">
@@ -353,7 +376,7 @@
             de meio planeta.
           </p>
         </div>
-        <div class="cartao">
+        <div class="cartao" data-aprofunda>
           <h3>Os quatro instrumentos</h3>
           <div id="instrumentos" style="margin-top:8px"></div>
         </div>
@@ -371,6 +394,7 @@
         a tabela original. O site indica a fonte de cada gráfico e o repositório explica
         como atualizar os dados.
       </p>
+      <div class="checagem-alvo" data-checagem="medir"></div>
     </div>
   </section>
 
@@ -385,6 +409,7 @@
           por uma linha invisível: ao norte dela falta água, ao sul sobra.
         </p>
       </div>
+      <div class="resumo revela" data-resumo="brasil"></div>
 
       <div class="palco revela" id="palco-teleconexao">
         <p class="palco__dica">Arraste para girar o planeta</p>
@@ -394,7 +419,7 @@
         <span><i class="chave chave--linha" style="background:#e2603a"></i>Sinal que resulta em seca</span>
         <span><i class="chave chave--linha" style="background:#3f9ae0"></i>Sinal que resulta em chuva</span>
       </div>
-      <p class="figura__rodape" style="border:0;justify-content:flex-start;margin-bottom:46px">
+      <p class="figura__rodape" style="border:0;justify-content:flex-start;margin-bottom:46px" data-aprofunda>
         Os arcos representam a propagação do sinal atmosférico do Pacífico para o Brasil. São uma representação didática, não trajetórias de ar.
       </p>
 
@@ -411,10 +436,30 @@
         <div class="fases" role="group" aria-label="Escolher região" id="botoes-regiao" style="margin-top:24px;display:flex;flex-wrap:wrap"></div>
       </div>
 
+      <div class="cartao revela onde" style="margin-bottom:34px">
+        <div class="onde__cabeca">
+          <div>
+            <h3>E onde você mora?</h3>
+            <p class="onde__intro">
+              O sinal de uma região inteira ainda é uma abstração. Escolha o seu estado
+              para ver o que o El Niño costuma significar ali, e o que já aconteceu.
+            </p>
+          </div>
+          <label class="onde__escolha" for="escolher-estado">
+            <span>Seu estado</span>
+            <select id="escolher-estado">
+              <option value="">Selecione…</option>
+            </select>
+          </label>
+        </div>
+        <div class="onde__resposta" id="onde-resposta" aria-live="polite"></div>
+      </div>
+
       <div class="grade grade--2">
         <div class="revela" id="grafico-regioes"></div>
         <div class="revela" id="grafico-matriz"></div>
       </div>
+      <div class="checagem-alvo" data-checagem="brasil"></div>
     </div>
   </section>
 
@@ -429,6 +474,7 @@
           recordes, porque caiu sobre um planeta que já estava mais quente.
         </p>
       </div>
+      <div class="resumo revela" data-resumo="caso"></div>
 
       <div class="grade grade--4 revela" id="indicadores-2324" style="margin-bottom:38px"></div>
 
@@ -464,6 +510,7 @@
           </p>
         </div>
       </div>
+      <div class="checagem-alvo" data-checagem="caso"></div>
     </div>
   </section>
 
@@ -478,6 +525,7 @@
           o extremo errado, na hora errada, tempo demais seguido.
         </p>
       </div>
+      <div class="resumo revela" data-resumo="ecossistemas"></div>
       <div class="grade grade--3" id="cartoes-eco"></div>
     </div>
   </section>
@@ -494,6 +542,7 @@
           antecedência.
         </p>
       </div>
+      <div class="resumo revela" data-resumo="historia"></div>
       <div class="tempo" id="linha-do-tempo"></div>
     </div>
   </section>
@@ -505,6 +554,7 @@
         <p class="olho">Capítulo 8</p>
         <h2 id="h-clima">El Niño e mudança climática não são a mesma coisa</h2>
       </div>
+      <div class="resumo revela" data-resumo="clima"></div>
       <div class="prosa revela">
         <p>
           O El Niño é uma <strong>oscilação natural</strong>: existe há milhares de anos,
@@ -520,7 +570,7 @@
           consecutivos de recorde global de temperatura, com 2024 chegando a 1,55 °C acima
           do nível pré-industrial.
         </p>
-        <p>
+        <p data-aprofunda>
           A pergunta científica em aberto é se o próprio El Niño está mudando. Vários estudos
           apontam para um <strong>aumento da frequência de eventos extremos</strong> num clima
           mais quente, mas a incerteza ainda é grande: os modelos concordam menos sobre o ENOS
@@ -533,14 +583,31 @@
           Amazônia mais fragmentada do que encontrava há trinta anos.
         </p>
       </div>
+      <div class="checagem-alvo" data-checagem="clima"></div>
+    </div>
+  </section>
+
+  <!-- ===================== MITOS ===================== -->
+  <section class="secao" id="mitos" aria-labelledby="h-mitos">
+    <div class="wrap">
+      <div class="cabecalho-secao revela">
+        <p class="olho">Capítulo 9</p>
+        <h2 id="h-mitos">Seis coisas que o El Niño não é</h2>
+        <p class="linha-fina">
+          Entender um fenômeno é também saber onde ele não chega. Cada frase abaixo
+          circula bastante, e cada uma esconde uma parte importante da história.
+        </p>
+      </div>
+      <div class="resumo revela" data-resumo="mitos"></div>
+      <div class="mitos" id="lista-mitos"></div>
     </div>
   </section>
 
   <!-- ===================== ADAPTAÇÃO ===================== -->
-  <section class="secao" id="adaptacao" aria-labelledby="h-adaptacao">
+  <section class="secao secao--escura" id="adaptacao" aria-labelledby="h-adaptacao">
     <div class="wrap">
       <div class="cabecalho-secao revela">
-        <p class="olho">Capítulo 9</p>
+        <p class="olho">Capítulo 10</p>
         <h2 id="h-adaptacao">Dá para se preparar, e o Brasil já sabe como</h2>
         <p class="linha-fina">
           A previsão sazonal do ENOS é uma das mais confiáveis da climatologia: dá para
@@ -548,10 +615,26 @@
           previsão em decisão.
         </p>
       </div>
+      <div class="resumo revela" data-resumo="adaptacao"></div>
       <div class="grade grade--4" id="adaptacao-grade" style="margin-bottom:40px"></div>
 
       <h3 class="revela" style="margin-bottom:16px">Onde acompanhar</h3>
       <ul class="orgaos revela" id="lista-orgaos"></ul>
+    </div>
+  </section>
+
+  <!-- ===================== GLOSSÁRIO ===================== -->
+  <section class="secao" id="glossario" aria-labelledby="h-glossario">
+    <div class="wrap">
+      <div class="cabecalho-secao revela">
+        <p class="olho">Para consultar</p>
+        <h2 id="h-glossario">Glossário</h2>
+        <p class="linha-fina">
+          Os termos técnicos desta página, reunidos. No texto eles aparecem
+          sublinhados: clique em qualquer um para ler a definição sem sair da frase.
+        </p>
+      </div>
+      <dl class="glossario" id="lista-glossario"></dl>
     </div>
   </section>
 
@@ -593,6 +676,23 @@
         </aside>
       </div>
     </div>
+  </section>
+
+
+  <!-- ===================== FICHA DE ESTUDO (só na impressão) ===================== -->
+  <section class="ficha" id="ficha" aria-hidden="true">
+    <header class="ficha__topo">
+      <h2>El Niño e o Brasil · ficha de estudo</h2>
+      <p>Resumo dos capítulos, glossário e questões. Material aberto, sob licença CC BY-NC-SA 4.0.</p>
+    </header>
+    <div class="ficha__colunas" id="ficha-resumos"></div>
+    <div class="ficha__glossario" id="ficha-glossario"></div>
+    <div class="ficha__quiz" id="ficha-quiz"></div>
+    <footer class="ficha__rodape">
+      <span>Nome: ______________________________________</span>
+      <span>Turma: ____________</span>
+      <span>Data: ____ / ____ / ______</span>
+    </footer>
   </section>
 
 </main>

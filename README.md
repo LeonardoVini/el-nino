@@ -79,7 +79,42 @@ npx vercel --prod
 | **Ecossistemas** | Amazônia, Caatinga, recifes de coral, pesca, Pantanal e Mata Atlântica |
 | **História** | 1877–79, 1982–83, 1997–98, 2015–16 e 2023–24 |
 | **Clima** | A diferença entre oscilação natural e tendência de aquecimento, e como as duas se somam |
+| **Mitos** | Seis frases correntes sobre o El Niño e o que cada uma esconde |
 | **O que fazer** | Adaptação em quatro horizontes e onde acompanhar o monitoramento oficial |
+| **Glossário** | Os 22 termos técnicos da página, também acessíveis dentro do texto |
+
+### Os apoios de leitura
+
+O conteúdo é denso, e a página tenta baixar o custo de entrada em vez de
+diluir o assunto:
+
+- **Resumo de capítulo**: três linhas no alto de cada seção, que também
+  alimentam a ficha impressa.
+- **Glossário embutido**: a primeira ocorrência de cada termo técnico no texto
+  vira um botão que abre a definição ali mesmo, sem tirar o leitor da frase.
+  Os painéis montados em tempo de uso, como o do estado escolhido, recebem a
+  mesma marcação.
+- **Etapas ligadas à cena**: cada passo do mecanismo leva o corte 3D do
+  Pacífico ao estágio correspondente e diz o que olhar nele.
+- **Comparação lado a lado**: duas cenas simultâneas, neutro e El Niño forte,
+  para quem não consegue segurar o estado anterior na memória enquanto arrasta
+  o controle.
+- **Checagem rápida**: uma pergunta ao fim de seis capítulos, com resposta
+  imediata. O teste distribuído retém mais do que o teste só no fim.
+- **Como ler este gráfico**: uma frase antes de cada figura dizendo o que é
+  cada marca e em que direção o olho corre.
+- **Onde você mora**: o sinal da região aterrissado em cada uma das 27
+  unidades da federação.
+- **Modo essencial**: recolhe caixas laterais, notas de figura e trechos de
+  aprofundamento. As ressalvas sobre incerteza continuam visíveis nos dois
+  modos, de propósito.
+- **Índice com progresso**: painel lateral com o quanto de cada capítulo já
+  passou pela tela, calculado na hora e nunca armazenado.
+- **Ficha de estudo**: resumos, glossário e as oito questões em branco, com
+  gabarito, montados só para a impressão (`body[data-imprimir="ficha"]`).
+- **Quiz formativo**: além da explicação da resposta certa, o motivo pelo qual
+  a alternativa escolhida não serve, o caminho de volta à seção que trata do
+  assunto e a opção de refazer só as que ficaram para trás.
 
 ### As três cenas 3D
 
@@ -152,6 +187,8 @@ assets/
   js/
     main.js                 orquestra tudo e injeta o conteúdo dos dados
     data.js                 dados e textos, com fonte declarada
+    didatica.js             glossário, resumos, checagens, índice e ficha de estudo
+    dom.js                  utilidades mínimas de DOM, compartilhadas
     charts.js               biblioteca de gráficos em SVG, escrita para o projeto
     brasil-map.js           mapa interativo das regiões
     scenes/

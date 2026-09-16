@@ -616,6 +616,11 @@ export function projetarRegiao(regiao, oni) {
 
 /* ===========================================================================
  * 11. Quiz
+ * ---------------------------------------------------------------------------
+ * `porQueNao` traz, para cada alternativa errada, o motivo pelo qual ela não
+ * serve. Errar só ensina quando o leitor descobre onde o raciocínio saiu do
+ * trilho. `ancora` aponta a seção que explica o ponto, para quem quiser
+ * revisar antes de seguir.
  * ------------------------------------------------------------------------ */
 
 export const perguntasQuiz = [
@@ -627,15 +632,29 @@ export const perguntasQuiz = [
       'Mudam de direção e passam a soprar do sul para o norte',
     ],
     correta: 1,
+    porQueNao: [
+      'Alísios mais fortes são a marca da La Niña, a fase oposta: é ela que empilha ainda mais água quente no oeste.',
+      null,
+      'Os alísios são ventos zonais, ou seja, sopram no sentido leste-oeste. O que muda no El Niño é a força, não o eixo.',
+    ],
     explicacao:
       'O enfraquecimento dos alísios é o gatilho de todo o resto. Sem eles segurando a água quente no oeste, ela escorrega de volta para leste, a termoclina se nivela e a ressurgência desliga.',
+    ancora: 'como-ocorre',
+    revisar: 'o corte do Pacífico, no Capítulo 2',
   },
   {
     pergunta: 'Qual região do Brasil costuma receber chuva acima da média em um El Niño forte?',
     opcoes: ['Nordeste', 'Norte', 'Sul'],
     correta: 2,
+    porQueNao: [
+      'No Nordeste acontece o contrário: a ZCIT fica retida ao norte e a quadra chuvosa de fevereiro a maio falha.',
+      'O Norte é a região que mais seca: o ramo descendente da circulação de Walker se instala sobre a Amazônia.',
+      null,
+    ],
     explicacao:
       'O jato subtropical se intensifica e trava as frentes frias sobre o Sul. A mesma frente que passaria em um dia fica parada e chove por uma semana, com desvios de 25% a 70% acima da média na primavera.',
+    ancora: 'brasil',
+    revisar: 'o mapa por região, no Capítulo 4',
   },
   {
     pergunta: 'O que o ONI mede, exatamente?',
@@ -645,15 +664,29 @@ export const perguntasQuiz = [
       'A altura média das ondas no Pacífico equatorial',
     ],
     correta: 1,
+    porQueNao: [
+      'Essa é a definição do IOS, o Índice de Oscilação Sul. Ele mede a metade atmosférica do fenômeno; o ONI mede a metade oceânica.',
+      null,
+      'A altura do mar é medida por satélite e ajuda a detectar o evento, mas não é o que define o índice: o ONI é temperatura.',
+    ],
     explicacao:
       'O ONI é a anomalia de temperatura do mar no Niño 3.4, em média móvel de três meses. A diferença de pressão entre o Taiti e Darwin é o IOS, que mede a metade atmosférica do mesmo fenômeno.',
+    ancora: 'medir',
+    revisar: 'como se mede um oceano inteiro, no Capítulo 3',
   },
   {
     pergunta: 'Qual foi o El Niño mais intenso já medido desde 1950?',
     opcoes: ['1997–98', '2015–16', '2023–24'],
     correta: 1,
+    porQueNao: [
+      'O de 1997–98 chegou a +2,4 °C e foi o primeiro previsto com antecedência, mas não é o recordista da série.',
+      null,
+      'O de 2023–24 parou em +2,0 °C. Bateu recordes de impacto, e não de intensidade: caiu sobre um planeta já mais quente.',
+    ],
     explicacao:
       'O evento de 2015–16 chegou a +2,6 °C no pico do ONI. O de 1997–98 ficou em +2,4 °C e o de 2023–24, em +2,0 °C. Intensidade no Pacífico, porém, não se traduz direto em intensidade de impacto no Brasil.',
+    ancora: 'medir',
+    revisar: 'o ranking dos eventos, no Capítulo 3',
   },
   {
     pergunta: 'Em outubro de 2023 o rio Negro chegou a 12,70 m em Manaus. Por que isso foi notícia?',
@@ -663,8 +696,15 @@ export const perguntasQuiz = [
       'Foi a primeira vez que o nível do rio foi medido com precisão',
     ],
     correta: 1,
+    porQueNao: [
+      'Foi o oposto de cheia: 12,70 m é nível de seca extrema. A cota média de estiagem fica em torno de 17 a 18 m.',
+      null,
+      'A régua do porto de Manaus é lida continuamente desde 1902, o que faz dela uma das séries hidrológicas mais longas do mundo.',
+    ],
     explicacao:
       'Foi o recorde de seca em mais de um século de leituras da régua do porto de Manaus. E o recorde caiu de novo no ano seguinte: 12,66 m em outubro de 2024.',
+    ancora: 'caso',
+    revisar: 'o caso de 2023–24, no Capítulo 5',
   },
   {
     pergunta: 'Por que a Amazônia seca durante um El Niño?',
@@ -674,8 +714,15 @@ export const perguntasQuiz = [
       'Porque as nascentes dos rios congelam nos Andes',
     ],
     correta: 0,
+    porQueNao: [
+      null,
+      'O desmatamento agrava a seca e é causa humana, não consequência do El Niño. São dois problemas que se somam, e não um que produz o outro.',
+      'A Amazônia é alimentada principalmente pela chuva na própria bacia, e o degelo andino não tem esse papel. Nada congela por causa do El Niño.',
+    ],
     explicacao:
       'A circulação de Walker se reorganiza e instala um ramo descendente sobre a Amazônia e o norte da América do Sul. Ar que desce aquece, seca e não forma nuvem, bem quando a estação seca já está no auge.',
+    ancora: 'como-ocorre',
+    revisar: 'os dois caminhos até o Brasil, no Capítulo 2',
   },
   {
     pergunta: 'O que costuma acontecer depois de um El Niño forte?',
@@ -685,8 +732,15 @@ export const perguntasQuiz = [
       'Uma La Niña, porque o sistema tende a passar do ponto',
     ],
     correta: 2,
+    porQueNao: [
+      'Não há escada de intensidade. Os eventos não se sucedem em ordem crescente, e o intervalo entre eles varia de dois a sete anos.',
+      'Períodos neutros existem, mas nada perto de uma década fixa. O sistema oscila de forma irregular.',
+      null,
+    ],
     explicacao:
       'Ondas de Rossby refletidas na borda oeste do Pacífico trazem água fria de volta. O sistema raramente para no equilíbrio: costuma ultrapassar e virar La Niña no ano seguinte.',
+    ancora: 'como-ocorre',
+    revisar: 'a etapa final do mecanismo, no Capítulo 2',
   },
   {
     pergunta: 'De onde vem o nome “El Niño”?',
@@ -696,8 +750,15 @@ export const perguntasQuiz = [
       'De uma expressão indígena andina que significa “mar morno”',
     ],
     correta: 1,
+    porQueNao: [
+      'O nome não homenageia ninguém. Gilbert Walker, que descreveu a metade atmosférica, deu nome à circulação, não ao fenômeno.',
+      null,
+      'A expressão é espanhola e religiosa: El Niño é o Menino Jesus, pela chegada da água quente por volta do Natal.',
+    ],
     explicacao:
       'El Niño é o Menino Jesus. Pescadores do norte do Peru notaram, no século XIX, que em certos anos a água quente chegava por volta do Natal e a pescaria sumia. Só muito depois se descobriu que aquilo era a ponta de um fenômeno planetário.',
+    ancora: 'o-que-e',
+    revisar: 'a origem do nome, no Capítulo 1',
   },
 ];
 
@@ -740,3 +801,470 @@ export const oferta = {
 
 /** A seção só entra no ar depois que o endereço de verdade for colocado. */
 export const ofertaPronta = () => !oferta.url.includes('TROQUE-PELO-SEU-CODIGO');
+
+/* ===========================================================================
+ * 13. Glossário
+ * ---------------------------------------------------------------------------
+ * `variacoes` lista as formas como o termo aparece no texto corrido. A
+ * primeira ocorrência de cada uma vira um botão que abre a definição no
+ * próprio lugar, sem tirar o leitor da frase.
+ * ------------------------------------------------------------------------ */
+
+export const glossario = [
+  {
+    id: 'alisios',
+    termo: 'Ventos alísios',
+    variacoes: ['ventos alísios', 'alísios'],
+    definicao:
+      'Ventos constantes que sopram de leste para oeste ao longo do equador. São eles que empurram a água aquecida pelo sol para o lado da Indonésia e sustentam o estado normal do Pacífico.',
+  },
+  {
+    id: 'termoclina',
+    termo: 'Termoclina',
+    variacoes: ['termoclina'],
+    definicao:
+      'A camada onde a temperatura da água cai rápido com a profundidade: a fronteira entre a água morna de cima e a água fria de baixo. Quanto mais rasa ela estiver, mais fácil é a água fria chegar à superfície.',
+  },
+  {
+    id: 'ressurgencia',
+    termo: 'Ressurgência',
+    variacoes: ['ressurgência'],
+    definicao:
+      'A subida de água fria e rica em nutrientes das profundezas para a superfície. Na costa do Peru é ela que sustenta uma das maiores pescarias do mundo, e é ela que o El Niño desliga.',
+  },
+  {
+    id: 'walker',
+    termo: 'Circulação de Walker',
+    variacoes: ['circulação de Walker', 'célula de Walker'],
+    definicao:
+      'O anel de ar que sobe sobre o Pacífico oeste quente, viaja para leste nas alturas, desce sobre o Pacífico leste frio e volta rente à água. É a engrenagem atmosférica que o El Niño desmonta.',
+  },
+  {
+    id: 'enos',
+    termo: 'ENOS',
+    variacoes: ['ENOS'],
+    definicao:
+      'El Niño–Oscilação Sul: o nome do sistema completo, oceano mais atmosfera. El Niño e La Niña são as duas fases extremas dele.',
+  },
+  {
+    id: 'oni',
+    termo: 'ONI',
+    variacoes: ['ONI'],
+    definicao:
+      'Oceanic Niño Index: a anomalia de temperatura da superfície do mar na região Niño 3.4, em média móvel de três meses. É o número que define oficialmente se há El Niño, La Niña ou nada.',
+  },
+  {
+    id: 'nino34',
+    termo: 'Região Niño 3.4',
+    variacoes: ['Niño 3.4'],
+    definicao:
+      'Uma caixa no meio do Pacífico equatorial, entre 5°N e 5°S e de 170°W a 120°W. É onde se mede o ONI, porque ali o sinal do oceano se conecta melhor com a resposta da atmosfera.',
+  },
+  {
+    id: 'anomalia',
+    termo: 'Anomalia',
+    variacoes: ['anomalia'],
+    definicao:
+      'A diferença entre o valor medido e a média histórica do mesmo lugar e da mesma época do ano. Uma anomalia de +2 °C não quer dizer água a 2 °C, e sim 2 °C acima do normal para aquele mês.',
+  },
+  {
+    id: 'zcit',
+    termo: 'Zona de Convergência Intertropical',
+    variacoes: ['Zona de Convergência Intertropical', 'ZCIT'],
+    definicao:
+      'A faixa de nuvens e chuva que circunda o planeta perto do equador, onde os alísios dos dois hemisférios se encontram. Quando ela desce sobre o semiárido, entre fevereiro e maio, chove; quando fica retida ao norte, não.',
+  },
+  {
+    id: 'conveccao',
+    termo: 'Convecção',
+    variacoes: ['convecção profunda', 'convecção'],
+    definicao:
+      'O movimento de ar quente e úmido que sobe, esfria e condensa, formando as nuvens altas de chuva tropical. Ela acompanha a água mais quente: é por isso que a chuva se muda de endereço junto com o El Niño.',
+  },
+  {
+    id: 'kelvin',
+    termo: 'Onda de Kelvin equatorial',
+    variacoes: ['onda de Kelvin equatorial', 'onda de Kelvin'],
+    definicao:
+      'Um pulso oceânico que viaja para leste ao longo do equador e afunda a termoclina por onde passa. Quase invisível na superfície, leva de dois a três meses para cruzar o Pacífico.',
+  },
+  {
+    id: 'rossby',
+    termo: 'Ondas de Rossby',
+    variacoes: ['ondas de Rossby'],
+    definicao:
+      'Ondas oceânicas que viajam no sentido contrário ao da onda de Kelvin, para oeste. Ao refletirem na borda do Pacífico, trazem água fria de volta e ajudam a encerrar o evento.',
+  },
+  {
+    id: 'bjerknes',
+    termo: 'Realimentação de Bjerknes',
+    variacoes: ['realimentação de Bjerknes'],
+    definicao:
+      'O círculo em que a causa vira consequência: alísios fracos aquecem o leste, o aquecimento desloca a chuva, a chuva deslocada enfraquece mais os alísios. É o motor que faz o evento crescer sozinho.',
+  },
+  {
+    id: 'jato',
+    termo: 'Jato subtropical',
+    variacoes: ['jato subtropical'],
+    definicao:
+      'Uma corrente de ar muito veloz a cerca de 10 km de altitude, na borda dos trópicos. Reforçado pelo El Niño, ele trava as frentes frias sobre o Sul do Brasil, que passam a chover dias seguidos no mesmo lugar.',
+  },
+  {
+    id: 'teleconexao',
+    termo: 'Teleconexão',
+    variacoes: ['teleconexão', 'Pacífico–América do Sul'],
+    definicao:
+      'A ligação entre o que acontece em um ponto do planeta e o clima de outro, a milhares de quilômetros. O trem de ondas que sai do Pacífico central e chega ao Sul do Brasil é uma teleconexão.',
+  },
+  {
+    id: 'modoki',
+    termo: 'El Niño Modoki',
+    variacoes: ['El Niño Modoki'],
+    definicao:
+      'Um tipo de evento em que o aquecimento se concentra no Pacífico central, e não no leste. O padrão de impactos muda, e é uma das razões de a previsão falar em probabilidade.',
+  },
+  {
+    id: 'mjo',
+    termo: 'Oscilação de Madden-Julian',
+    variacoes: ['oscilação de Madden-Julian'],
+    definicao:
+      'Um pulso de nuvens e vento que dá a volta no cinturão tropical a cada 30 a 60 dias. Suas rajadas de oeste são um dos empurrões que podem iniciar um El Niño.',
+  },
+  {
+    id: 'ios',
+    termo: 'Índice de Oscilação Sul (IOS)',
+    variacoes: ['Índice de Oscilação Sul', 'IOS'],
+    definicao:
+      'A diferença de pressão atmosférica entre o Taiti e Darwin, na Austrália, medida desde 1924. É a metade atmosférica do fenômeno: quando fica fortemente negativa, os alísios estão fracos.',
+  },
+  {
+    id: 'quadra',
+    termo: 'Quadra chuvosa',
+    variacoes: ['quadra chuvosa'],
+    definicao:
+      'O período de fevereiro a maio em que cai a maior parte da chuva do ano no semiárido nordestino. Se ela falha, não há segunda chance dentro do mesmo ano.',
+  },
+  {
+    id: 'veranico',
+    termo: 'Veranico',
+    variacoes: ['veranicos', 'veranico'],
+    definicao:
+      'Um período seco e quente de dias ou semanas dentro da estação chuvosa. Curto para aparecer no total de chuva do mês, longo o bastante para matar a lavoura no estágio errado.',
+  },
+  {
+    id: 'poca',
+    termo: 'Poça quente do Pacífico oeste',
+    variacoes: ['poça quente do Pacífico oeste', 'poça quente'],
+    definicao:
+      'A maior massa de água quente do planeta, com mais de 29 °C, empilhada pelos alísios do lado da Indonésia. É de lá que a água escorrega para leste quando o vento afrouxa.',
+  },
+  {
+    id: 'climatologia',
+    termo: 'Média climatológica',
+    variacoes: ['média climatológica', 'climatologia'],
+    definicao:
+      'A média de um elemento do clima em um período longo de referência, em geral trinta anos. É a régua contra a qual se mede qualquer desvio.',
+  },
+];
+
+/* ===========================================================================
+ * 14. As etapas do mecanismo, ligadas à cena 3D
+ * ---------------------------------------------------------------------------
+ * `oni` é o valor que o simulador assume quando a etapa é aberta, e `foco`
+ * diz o que olhar na cena naquele estágio. A cena tem um eixo só, a
+ * intensidade, e as etapas percorrem esse eixo na ordem em que o evento
+ * acontece de verdade.
+ * ------------------------------------------------------------------------ */
+
+export const etapasMecanismo = [
+  {
+    titulo: 'Algo enfraquece os alísios',
+    oni: 0.3,
+    texto:
+      'Basta um empurrão: uma sequência de rajadas de oeste no Pacífico ocidental, muitas vezes ligadas à oscilação de Madden-Julian. O sistema sai do equilíbrio.',
+    foco: 'Repare nas setas dos alísios, logo acima da água: elas encurtam antes de qualquer outra coisa mudar.',
+  },
+  {
+    titulo: 'Uma onda oceânica atravessa o Pacífico',
+    oni: 0.7,
+    texto:
+      'O empurrão gera uma onda de Kelvin equatorial, um pulso invisível na superfície que leva de dois a três meses para cruzar o oceano, afundando a termoclina por onde passa.',
+    foco: 'Acompanhe a linha clara da termoclina: ela começa a perder a inclinação, afundando do lado direito.',
+  },
+  {
+    titulo: 'A ressurgência deixa de funcionar',
+    oni: 1.2,
+    texto:
+      'Com a termoclina afundada no leste, a água que sobe na costa do Peru não vem mais da camada fria, e sim de água já morna. A superfície esquenta rápido.',
+    foco: 'Olhe o canto direito, junto à América do Sul: o azul frio da superfície dá lugar ao laranja.',
+  },
+  {
+    titulo: 'A chuva muda de endereço',
+    oni: 1.6,
+    texto:
+      'A convecção profunda segue o mar quente e se instala no Pacífico central. A circulação de Walker se parte e passa a descer sobre a Indonésia e sobre o norte da América do Sul.',
+    foco: 'A coluna de nuvens caminha da esquerda para o meio da cena. É esse deslocamento que chega ao Brasil.',
+  },
+  {
+    titulo: 'O ciclo se retroalimenta',
+    oni: 2.0,
+    texto:
+      'Convecção deslocada para o centro do oceano enfraquece ainda mais os alísios, o que aquece ainda mais o leste. É a realimentação de Bjerknes: a causa vira consequência e o evento se amplifica.',
+    foco: 'Tudo ao mesmo tempo: alísios curtos, termoclina quase plana, superfície quente de ponta a ponta.',
+  },
+  {
+    titulo: 'O pico e a descarga',
+    oni: -1.2,
+    texto:
+      'Entre novembro e janeiro o evento atinge o máximo. Ondas de Rossby refletidas na borda oeste já vêm trazendo água fria de volta, e o sistema costuma passar do ponto, virando La Niña no ano seguinte.',
+    foco: 'A cena salta para o outro extremo: é assim que o Pacífico costuma ficar no ano seguinte ao de um El Niño forte.',
+  },
+];
+
+/* ===========================================================================
+ * 15. Resumo de cada capítulo
+ * ---------------------------------------------------------------------------
+ * Três linhas por capítulo. Aparecem no alto da seção, alimentam o modo
+ * essencial e são a espinha da ficha de estudo impressa.
+ * ------------------------------------------------------------------------ */
+
+export const resumos = [
+  {
+    secao: 'o-que-e',
+    titulo: 'O que é o El Niño',
+    pontos: [
+      'Os ventos alísios empurram a água quente para o lado da Indonésia; do lado do Peru, água fria sobe do fundo.',
+      'No El Niño os alísios enfraquecem, a água quente escorrega de volta para leste e a chuva se muda com ela.',
+      'Oceano e atmosfera são um sistema só, chamado ENOS; a La Niña é a fase oposta do mesmo sistema.',
+    ],
+  },
+  {
+    secao: 'como-ocorre',
+    titulo: 'Como o fenômeno se forma',
+    pontos: [
+      'Um empurrão inicial nos alísios dispara uma onda oceânica que afunda a termoclina no leste do Pacífico.',
+      'Sem a água fria da ressurgência, a superfície esquenta e a convecção se muda para o centro do oceano.',
+      'O deslocamento enfraquece ainda mais os alísios: o evento se amplifica sozinho até passar do ponto.',
+    ],
+  },
+  {
+    secao: 'medir',
+    titulo: 'Como se mede',
+    pontos: [
+      'O ONI é a anomalia de temperatura do mar na região Niño 3.4, em média móvel de três meses.',
+      'Cinco trimestres seguidos em +0,5 °C ou mais definem um El Niño; em −0,5 °C ou menos, uma La Niña.',
+      'Boias fundeadas, satélites de altimetria, flutuadores Argo e o índice de pressão IOS sustentam a medição.',
+    ],
+  },
+  {
+    secao: 'brasil',
+    titulo: 'O sinal no Brasil',
+    pontos: [
+      'Norte e Nordeste secam: o ar desce sobre a Amazônia e a ZCIT fica retida ao norte do semiárido.',
+      'O Sul encharca: o jato subtropical reforçado trava as frentes frias sobre a região.',
+      'Centro-Oeste e Sudeste ficam no meio, com sinal fraco na chuva e sinal forte no calor.',
+    ],
+  },
+  {
+    secao: 'caso',
+    titulo: '2023–24, o caso recente',
+    pontos: [
+      'O rio Negro bateu em Manaus o menor nível em mais de um século, e o recorde caiu de novo em 2024.',
+      'O calor recorde e a chuva fora de época ajudaram a maior epidemia de dengue já registrada no país.',
+      'No mesmo período o Rio Grande do Sul viveu o extremo oposto, com a maior enchente de sua história.',
+    ],
+  },
+  {
+    secao: 'ecossistemas',
+    titulo: 'Os ecossistemas',
+    pontos: [
+      'Na seca, a Amazônia chega a emitir mais carbono do que absorve, e a floresta úmida passa a queimar.',
+      'A Caatinga aguenta a seca, mas não vários anos seguidos sem a quadra chuvosa: o solo se degrada.',
+      'No oceano, o coral branqueia e a ressurgência desligada derruba a pescaria da anchoveta no Peru.',
+    ],
+  },
+  {
+    secao: 'historia',
+    titulo: 'Os eventos que marcaram o país',
+    pontos: [
+      'A Grande Seca de 1877–79 pôs a seca no centro da política brasileira.',
+      'O fracasso em prever 1982–83 motivou a rede de boias que monitora o Pacífico até hoje.',
+      '1997–98, 2015–16 e 2023–24 foram previstos com meses de antecedência.',
+    ],
+  },
+  {
+    secao: 'clima',
+    titulo: 'El Niño e mudança climática',
+    pontos: [
+      'O El Niño é uma oscilação que vai e volta; o aquecimento global é uma tendência que só sobe.',
+      'Os dois se somam, e por isso anos de El Niño são sistematicamente mais quentes que os vizinhos.',
+      'A linha de base subiu: um evento médio hoje produz impactos que antes exigiam um evento forte.',
+    ],
+  },
+  {
+    secao: 'mitos',
+    titulo: 'O que o El Niño não é',
+    pontos: [
+      'Ele não é o aquecimento global, e não explica sozinho nenhum desastre isolado.',
+      'Ele não seca o Brasil inteiro: parte o país em dois regimes opostos.',
+      'Ele não é imprevisível: é justamente a previsão sazonal mais confiável que existe.',
+    ],
+  },
+  {
+    secao: 'adaptacao',
+    titulo: 'O que dá para fazer',
+    pontos: [
+      'A previsão sai com meses de antecedência: o gargalo é transformá-la em decisão.',
+      'Antes do evento se ajusta plantio, reservatório e estoque; durante, a resposta é emergencial.',
+      'Entre eventos é que se reduz a vulnerabilidade, com cisterna, drenagem e combate ao desmatamento.',
+    ],
+  },
+];
+
+/* ===========================================================================
+ * 16. Checagem rápida ao fim de cada capítulo
+ * ------------------------------------------------------------------------ */
+
+export const checagens = [
+  {
+    secao: 'o-que-e',
+    pergunta: 'No estado normal do Pacífico, de que lado fica a água mais quente?',
+    opcoes: ['Do lado da Indonésia, a oeste', 'Do lado do Peru, a leste'],
+    correta: 0,
+    explicacao:
+      'Os alísios empurram a água aquecida pelo sol para oeste e a empilham perto da Indonésia. Do lado do Peru, a água que sai é reposta por água fria vinda do fundo.',
+  },
+  {
+    secao: 'como-ocorre',
+    pergunta: 'Por que o El Niño se amplifica sozinho depois de começar?',
+    opcoes: [
+      'Porque a chuva deslocada enfraquece ainda mais os alísios, que aquecem ainda mais o leste',
+      'Porque o sol aquece mais o Pacífico nos anos de evento',
+    ],
+    correta: 0,
+    explicacao:
+      'É a realimentação de Bjerknes: cada efeito reforça a própria causa. O ciclo só se encerra quando as ondas refletidas na borda oeste trazem água fria de volta.',
+  },
+  {
+    secao: 'medir',
+    pergunta: 'Um ONI de +1,6 °C corresponde a que classificação?',
+    opcoes: ['El Niño moderado', 'El Niño forte', 'El Niño muito forte'],
+    correta: 1,
+    explicacao:
+      'A escala vai por faixas: fraco de 0,5 a 0,9 °C, moderado de 1,0 a 1,4, forte de 1,5 a 1,9 e muito forte de 2,0 em diante.',
+  },
+  {
+    secao: 'brasil',
+    pergunta: 'Duas regiões vizinhas, Nordeste e Sul, reagem de formas opostas. Por quê?',
+    opcoes: [
+      'Porque o sinal chega a cada uma por um caminho diferente: um tropical, outro extratropical',
+      'Porque o Sul fica mais longe do Pacífico do que o Nordeste',
+    ],
+    correta: 0,
+    explicacao:
+      'Ao Norte e ao Nordeste o recado chega pela circulação de Walker e pela posição da ZCIT. Ao Sul chega por um trem de ondas atmosféricas que reforça o jato subtropical.',
+  },
+  {
+    secao: 'caso',
+    pergunta: 'Por que 2023–24 bateu recordes sem ter sido o evento mais intenso já medido?',
+    opcoes: [
+      'Porque caiu sobre um planeta e um oceano que já estavam mais quentes',
+      'Porque durou muito mais tempo que os eventos anteriores',
+    ],
+    correta: 0,
+    explicacao:
+      'O pico de 2023–24 (+2,0 °C) ficou abaixo do de 2015–16 (+2,6 °C). A diferença é a linha de base: o mesmo desvio, somado ao aquecimento de fundo, produz extremos maiores.',
+  },
+  {
+    secao: 'clima',
+    pergunta: 'Qual é a diferença essencial entre o El Niño e o aquecimento global?',
+    opcoes: [
+      'O El Niño oscila e devolve o calor; o aquecimento global é uma tendência que não volta',
+      'O El Niño afeta só o oceano; o aquecimento global, só a atmosfera',
+    ],
+    correta: 0,
+    explicacao:
+      'Um é ciclo, o outro é tendência. O El Niño redistribui calor entre oceano e atmosfera; o aquecimento global adiciona calor ao sistema inteiro, e os dois se somam.',
+  },
+];
+
+/* ===========================================================================
+ * 17. Mitos e mal-entendidos
+ * ------------------------------------------------------------------------ */
+
+export const mitos = [
+  {
+    mito: 'El Niño é o aquecimento global.',
+    veredito: 'Não',
+    texto:
+      'São coisas de natureza diferente. O El Niño é uma oscilação natural que redistribui, por alguns meses, calor que o oceano já tinha guardado, e depois devolve. O aquecimento global é uma tendência de longo prazo causada pelo acúmulo de gases de efeito estufa. O que existe é soma: um El Niño sobre um planeta mais quente entrega extremos maiores do que o mesmo El Niño entregaria há trinta anos.',
+  },
+  {
+    mito: 'O El Niño seca o Brasil inteiro.',
+    veredito: 'Ao contrário',
+    texto:
+      'Ele parte o país em dois. Enquanto o Norte e o Nordeste perdem chuva, o Sul recebe bem mais do que a média, porque o sinal chega a cada região por um caminho atmosférico diferente. No Centro-Oeste e no Sudeste o efeito sobre a chuva é fraco e muda de evento para evento, ainda que o calor apareça de forma consistente.',
+  },
+  {
+    mito: 'Aquela enchente foi culpa do El Niño.',
+    veredito: 'Não é assim que funciona',
+    texto:
+      'O El Niño não produz um desastre específico: ele muda a probabilidade de que aconteça. A enchente de maio de 2024 no Rio Grande do Sul foi causada por um bloqueio atmosférico sobre um estado já encharcado, num contexto de aquecimento global. O El Niño foi um fator entre vários, e atribuir tudo a ele esconde as outras causas, inclusive as que dependem de decisão humana.',
+  },
+  {
+    mito: 'Como o El Niño é natural, não há o que fazer.',
+    veredito: 'Há muito o que fazer',
+    texto:
+      'Justamente por ser um ciclo do oceano, ele é previsível com meses de antecedência, mais do que qualquer previsão de tempo. Esse prazo é tempo de decisão: ajustar plantio, encher reservatório, pré-posicionar brigada de incêndio, preparar abrigo. O dano não é o evento, é o despreparo.',
+  },
+  {
+    mito: 'Se o El Niño é forte, o impacto no Brasil também será.',
+    veredito: 'Nem sempre',
+    texto:
+      'A intensidade medida no Pacífico não se traduz linearmente em impacto aqui. Conta onde exatamente o oceano aqueceu, o que o Atlântico está fazendo ao mesmo tempo e em que estado o solo, os rios e as cidades já estavam. Eventos com aquecimento concentrado no Pacífico central, os chamados Modoki, produzem padrões diferentes dos que aquecem o leste.',
+  },
+  {
+    mito: 'El Niño acontece de sete em sete anos, como um relógio.',
+    veredito: 'Não há relógio',
+    texto:
+      'O intervalo entre eventos varia de dois a sete anos, sem regularidade. Houve El Niño em 2015–16 e de novo em 2018–19; depois vieram três anos seguidos de La Niña. É uma oscilação irregular, e é por isso que ela precisa ser monitorada o tempo todo, e não prevista por calendário.',
+  },
+];
+
+/* ===========================================================================
+ * 18. Onde você mora
+ * ---------------------------------------------------------------------------
+ * O sinal regional descrito em `regioesBrasil`, aterrissado em cada unidade
+ * da federação. A nota diz o que o El Niño costuma significar ali, sem
+ * prometer o que vai acontecer no próximo evento.
+ * ------------------------------------------------------------------------ */
+
+export const estados = [
+  { uf: 'AC', nome: 'Acre', regiao: 'norte', nota: 'O estado alterna cheia no começo do ano e estiagem no segundo semestre. Em anos de El Niño a seca se aprofunda, os rios baixam e comunidades que só se deslocam por água ficam isoladas.' },
+  { uf: 'AL', nome: 'Alagoas', regiao: 'nordeste', nota: 'O agreste e o sertão dependem da quadra chuvosa de fevereiro a maio. Quando ela falha, o abastecimento das cidades do interior entra em rodízio e a lavoura de sequeiro se perde.' },
+  { uf: 'AM', nome: 'Amazonas', regiao: 'norte', nota: 'É onde a seca de 2023–24 foi mais dura: o rio Negro chegou a 12,70 m em Manaus, o menor nível desde 1902, e os 62 municípios do estado decretaram emergência.' },
+  { uf: 'AP', nome: 'Amapá', regiao: 'norte', nota: 'A chuva depende da ZCIT, que em anos de El Niño fica retida mais ao norte. O resultado é uma estação chuvosa mais curta e rios mais baixos, com sinal menos extremo que no centro da Amazônia.' },
+  { uf: 'BA', nome: 'Bahia', regiao: 'nordeste', nota: 'Dois problemas diferentes no mesmo estado: no semiárido, a quadra chuvosa que não vem; no oeste produtor de grãos, os veranicos que atingem a soja no meio do ciclo.' },
+  { uf: 'CE', nome: 'Ceará', regiao: 'nordeste', nota: 'O estado que mais organizou sua vida em torno da previsão. A Funceme acompanha a quadra chuvosa de fevereiro a maio, e o nível dos açudes no fim de maio define o ano inteiro.' },
+  { uf: 'DF', nome: 'Distrito Federal', regiao: 'centro-oeste', nota: 'Sinal fraco na chuva e forte no calor: primavera mais quente, umidade relativa muito baixa e risco maior de incêndio no Cerrado antes das primeiras chuvas.' },
+  { uf: 'ES', nome: 'Espírito Santo', regiao: 'sudeste', nota: 'Fica na faixa de transição, onde o desvio de chuva muda de evento para evento. O que aparece com consistência é o calor, com ondas mais longas na primavera e no verão.' },
+  { uf: 'GO', nome: 'Goiás', regiao: 'centro-oeste', nota: 'O risco típico é o veranico: um período seco dentro da estação chuvosa, curto demais para aparecer no total do mês e longo o bastante para atingir a lavoura no estágio errado.' },
+  { uf: 'MA', nome: 'Maranhão', regiao: 'nordeste', nota: 'No meio-norte a chuva vem com a descida da ZCIT. Em anos de El Niño ela chega atrasada, o que comprime o calendário de plantio e agrava a estiagem no leste do estado.' },
+  { uf: 'MG', nome: 'Minas Gerais', regiao: 'sudeste', nota: 'Foi em Araçuaí que o INMET registrou 44,8 °C em 19 de novembro de 2023, a maior temperatura já medida no Brasil. A chuva, por outro lado, tem sinal fraco e irregular.' },
+  { uf: 'MS', nome: 'Mato Grosso do Sul', regiao: 'centro-oeste', nota: 'O estado fica na costura entre dois regimes: o sul pode receber a chuva do padrão sulino, enquanto o norte, no Pantanal, seca e queima quando a cheia não chega.' },
+  { uf: 'MT', nome: 'Mato Grosso', regiao: 'centro-oeste', nota: 'O que está em jogo é a data de início das chuvas. Um começo atrasado adia o plantio da soja e empurra a safrinha de milho para fora da janela ideal.' },
+  { uf: 'PA', nome: 'Pará', regiao: 'norte', nota: 'Estiagem forte no leste do estado, fogo em áreas de floresta que normalmente não queimam e restrição de calado nos rios usados para escoar grãos pelo Arco Norte.' },
+  { uf: 'PB', nome: 'Paraíba', regiao: 'nordeste', nota: 'O sertão paraibano vive de açude e de cisterna. Quando a quadra chuvosa falha em anos seguidos, o abastecimento de cidades inteiras passa a depender de carro-pipa.' },
+  { uf: 'PE', nome: 'Pernambuco', regiao: 'nordeste', nota: 'Do litoral ao sertão, o estado atravessa três climas. O impacto maior aparece no agreste e no sertão, onde a quadra chuvosa mais curta compromete a safra e os reservatórios.' },
+  { uf: 'PI', nome: 'Piauí', regiao: 'nordeste', nota: 'A chuva chega pela ZCIT e pelos sistemas que descem do norte. Com o El Niño, o início da estação atrasa e o sul do estado, produtor de grãos, sofre com veranicos.' },
+  { uf: 'PR', nome: 'Paraná', regiao: 'sul', nota: 'Chuva bem acima da média, sobretudo na primavera. O trigo perde qualidade no campo, a colheita da soja atrasa e a semeadura do milho escorrega no calendário.' },
+  { uf: 'RJ', nome: 'Rio de Janeiro', regiao: 'sudeste', nota: 'Em novembro de 2023 a sensação térmica na cidade chegou a 59,7 °C. O sinal de chuva é fraco, mas a combinação de calor e chuva concentrada aumenta o risco em encostas.' },
+  { uf: 'RN', nome: 'Rio Grande do Norte', regiao: 'nordeste', nota: 'Um dos estados mais secos do país em anos de El Niño: a quadra chuvosa encurta, os açudes do interior baixam e a produção de sequeiro praticamente desaparece.' },
+  { uf: 'RO', nome: 'Rondônia', regiao: 'norte', nota: 'A seca do rio Madeira interrompe a balsa que abastece Manaus e derruba a geração das hidrelétricas de Santo Antônio e Jirau, que dependem da vazão do rio.' },
+  { uf: 'RR', nome: 'Roraima', regiao: 'norte', nota: 'O caso mais extremo do país: a estação seca de Roraima cai no primeiro semestre, quando o El Niño ainda está forte. Em 1998 o fogo avançou por milhares de quilômetros quadrados de floresta.' },
+  { uf: 'RS', nome: 'Rio Grande do Sul', regiao: 'sul', nota: 'O extremo oposto do Norte. Em setembro de 2023 um ciclone extratropical matou 54 pessoas no Vale do Taquari; em maio de 2024 veio a maior enchente da história do estado, com 478 municípios atingidos.' },
+  { uf: 'SC', nome: 'Santa Catarina', regiao: 'sul', nota: 'Em julho de 1983, durante um El Niño forte, o rio Itajaí-Açu chegou a 15,34 m em Blumenau, na maior enchente do século no estado. O padrão de frentes travadas se repete a cada evento.' },
+  { uf: 'SE', nome: 'Sergipe', regiao: 'nordeste', nota: 'O agreste e o sertão sergipanos perdem a quadra chuvosa, com impacto direto no rebanho e na produção de leite, que é a base da economia do interior.' },
+  { uf: 'SP', nome: 'São Paulo', regiao: 'sudeste', nota: 'Sinal fraco na chuva e forte no calor, com ondas mais frequentes e mais longas. A chuva tende a se concentrar em episódios intensos, o que pressiona a drenagem urbana.' },
+  { uf: 'TO', nome: 'Tocantins', regiao: 'norte', nota: 'Entre o Norte seco e o Centro-Oeste irregular: a estiagem se prolonga, o Cerrado seca antes do tempo e os focos de queimada aumentam no fim da estação seca.' },
+];

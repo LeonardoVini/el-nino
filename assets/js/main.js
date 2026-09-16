@@ -9,19 +9,11 @@ import {
   graficoMatriz, comSinal, fmt1,
 } from './charts.js';
 import { criarMapaBrasil, corAnomalia, FAIXAS_LEGENDA } from './brasil-map.js';
-
-const $ = (s, raiz = document) => raiz.querySelector(s);
-const $$ = (s, raiz = document) => [...raiz.querySelectorAll(s)];
-
-const token = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-
-function elemento(tag, cls, pai, texto) {
-  const n = document.createElement(tag);
-  if (cls) n.className = cls;
-  if (texto !== undefined) n.textContent = texto;
-  pai?.appendChild(n);
-  return n;
-}
+import { $, $$, token, elemento } from './dom.js';
+import {
+  montarResumos, ligarGlossario, montarChecagens, montarMitos,
+  ligarOndeVoceMora, ligarSumario, montarFicha, marcarTermosDinamicos,
+} from './didatica.js';
 
 /* =========================================================================
  * Navegação, progresso e revelação
@@ -113,16 +105,71 @@ function ligarRevelacao() {
   varrer();
 }
 
-function ligarEtapas() {
-  const etapas = $$('#etapas-mecanismo .etapa');
-  if (!etapas.length) return;
+/**
+ * Monta as etapas do mecanismo e liga cada uma ao simulador: clicar leva a
+ * cena ao estágio correspondente e diz o que olhar nela. A ordem das etapas
+ * percorre o eixo de intensidade na sequência em que o evento acontece.
+ */
+function montarEtapas() {
+  const destino = $('#etapas-mecanismo');
+  if (!destino) return;
+
+  const suave = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let selecionada = -1;
+
+  const etapas = dados.etapasMecanismo.map((e, i) => {
+    const item = elemento('li', 'etapa', destino);
+    const corpo = elemento('div', null, item);
+    elemento('h3', null, corpo, e.titulo);
+    elemento('p', null, corpo, e.texto);
+
+    const acao = elemento('button', 'etapa__ver', corpo, 'Ver na cena');
+    acao.type = 'button';
+    acao.setAttribute('aria-pressed', 'false');
+
+    const foco = elemento('p', 'etapa__foco', corpo, e.foco);
+    foco.hidden = true;
+
+    acao.addEventListener('click', () => escolher(i));
+    return { item, acao, foco, oni: e.oni };
+  });
+
+  function escolher(i) {
+    if (selecionada === i) return desmarcar();
+    selecionada = i;
+    etapas.forEach((et, j) => {
+      const ativa = j === i;
+      et.item.dataset.selecionada = String(ativa);
+      et.acao.setAttribute('aria-pressed', String(ativa));
+      et.acao.textContent = ativa ? 'Mostrando na cena' : 'Ver na cena';
+      et.foco.hidden = !ativa;
+    });
+    definirONI(etapas[i].oni);
+
+    const palco = $('#palco-pacifico');
+    const r = palco?.getBoundingClientRect();
+    if (r && (r.bottom < 80 || r.top > window.innerHeight - 120)) {
+      palco.scrollIntoView({ block: 'center', behavior: suave ? 'smooth' : 'auto' });
+    }
+  }
+
+  function desmarcar() {
+    selecionada = -1;
+    for (const et of etapas) {
+      et.item.dataset.selecionada = 'false';
+      et.acao.setAttribute('aria-pressed', 'false');
+      et.acao.textContent = 'Ver na cena';
+      et.foco.hidden = true;
+    }
+  }
+
   const obs = new IntersectionObserver(
     (entradas) => {
       for (const e of entradas) e.target.dataset.ativa = String(e.isIntersecting);
     },
     { rootMargin: '-40% 0px -40% 0px' }
   );
-  etapas.forEach((e) => obs.observe(e));
+  etapas.forEach((e) => obs.observe(e.item));
 }
 
 /* =========================================================================
@@ -139,6 +186,9 @@ const ONI_CHEIO = 2;
  */
 let aplicarFaseNaCena = () => {};
 let oniCorrente = 0;
+
+/** Preenchida por `ligarSimulador`: move o simulador inteiro para um ONI. */
+let definirONI = () => {};
 
 const TEXTO_FASE = {
   nina:
@@ -257,6 +307,7 @@ function ligarSimulador() {
     b.addEventListener('click', () => aplicar(Number(b.dataset.oni), 'atalho'));
   }
 
+  definirONI = (oni) => aplicar(oni, 'externo');
   aplicar(Number(controle.value), 'inicial');
 }
 
@@ -418,54 +469,76 @@ function montarOferta() {
  * Quiz
  * ====================================================================== */
 
+/**
+ * Quiz formativo: cada resposta explica não só por que a certa está certa,
+ * mas por que a escolhida está errada, e oferece o caminho de volta à seção
+ * que trata do assunto. No fim dá para refazer só as que ficaram para trás.
+ */
 function montarQuiz() {
   const lista = $('#quiz-lista');
   const placar = $('#quiz-placar');
+  const total = dados.perguntasQuiz.length;
   if (!lista) return;
 
-  const total = dados.perguntasQuiz.length;
+  let indices = dados.perguntasQuiz.map((_, i) => i);
   let respondidas = 0;
   let acertos = 0;
+  let erradas = [];
+
+  function refazer(subconjunto) {
+    indices = subconjunto;
+    lista.textContent = '';
+    placar.hidden = true;
+    respondidas = 0;
+    acertos = 0;
+    erradas = [];
+    construir();
+    lista.querySelector('.quiz__opcao')?.focus();
+  }
 
   function atualizarPlacar() {
-    if (respondidas < total) {
-      placar.hidden = true;
-      return;
-    }
+    if (respondidas < indices.length) return;
+    const rodada = indices.length;
     placar.hidden = false;
     placar.textContent = '';
-    const nota = elemento('strong', 'quiz__nota', placar, `${acertos} de ${total}`);
-    nota.dataset.tom = acertos === total ? 'cheio' : acertos >= total * 0.6 ? 'bom' : 'parcial';
+
+    const nota = elemento('strong', 'quiz__nota', placar, `${acertos} de ${rodada}`);
+    nota.dataset.tom = acertos === rodada ? 'cheio' : acertos >= rodada * 0.6 ? 'bom' : 'parcial';
+
     const recado =
-      acertos === total
+      acertos === rodada
         ? 'Gabarito completo. Você entendeu o mecanismo, não só decorou os efeitos.'
-        : acertos >= total * 0.6
+        : acertos >= rodada * 0.6
           ? 'Boa base. Vale reler o capítulo sobre como o fenômeno se forma.'
           : 'Sem problema: role de volta ao corte do Pacífico e refaça o percurso.';
     elemento('span', 'quiz__recado', placar, recado);
-    const refazer = elemento('button', 'botao', placar, 'Refazer o quiz');
-    refazer.type = 'button';
-    refazer.addEventListener('click', () => {
-      lista.textContent = '';
-      placar.hidden = true;
-      respondidas = 0;
-      acertos = 0;
-      construir();
-      lista.querySelector('.quiz__opcao')?.focus();
-    });
+
+    const acoes = elemento('div', 'quiz__acoes', placar);
+    if (erradas.length) {
+      const so = elemento('button', 'botao botao--primario', acoes,
+        erradas.length === 1 ? 'Refazer a que errei' : `Refazer só as ${erradas.length} que errei`);
+      so.type = 'button';
+      const pendentes = [...erradas];
+      so.addEventListener('click', () => refazer(pendentes));
+    }
+    const tudo = elemento('button', 'botao', acoes, 'Refazer o quiz inteiro');
+    tudo.type = 'button';
+    tudo.addEventListener('click', () => refazer(dados.perguntasQuiz.map((_, i) => i)));
   }
 
   function construir() {
-    dados.perguntasQuiz.forEach((q, i) => {
+    indices.forEach((indice, posicao) => {
+      const q = dados.perguntasQuiz[indice];
       const item = elemento('article', 'quiz__item', lista);
 
-      const numero = elemento('span', 'quiz__numero', item, `Pergunta ${i + 1} de ${total}`);
-      numero.id = `quiz-p${i}`;
+      const numero = elemento('span', 'quiz__numero', item,
+        `Pergunta ${posicao + 1} de ${indices.length}`);
+      numero.id = `quiz-p${indice}`;
       elemento('h3', 'quiz__pergunta', item, q.pergunta);
 
       const grupo = elemento('div', 'quiz__opcoes', item);
       grupo.setAttribute('role', 'group');
-      grupo.setAttribute('aria-labelledby', `quiz-p${i}`);
+      grupo.setAttribute('aria-labelledby', numero.id);
 
       const resposta = elemento('div', 'quiz__resposta', item);
       resposta.hidden = true;
@@ -484,6 +557,7 @@ function montarQuiz() {
         const certo = escolha === q.correta;
         respondidas += 1;
         if (certo) acertos += 1;
+        else erradas.push(indice);
 
         botoes.forEach((b, j) => {
           b.disabled = true;
@@ -496,7 +570,20 @@ function montarQuiz() {
         resposta.dataset.tom = certo ? 'certo' : 'errado';
         resposta.textContent = '';
         elemento('strong', null, resposta, certo ? 'Isso mesmo.' : 'Não é essa.');
-        elemento('span', null, resposta, ` ${q.explicacao}`);
+
+        // por que a escolhida não serve: é aí que o erro vira aprendizado
+        const motivo = certo ? null : q.porQueNao?.[escolha];
+        if (motivo) {
+          const bloco = elemento('p', 'quiz__motivo', resposta);
+          elemento('strong', null, bloco, `A alternativa ${String.fromCharCode(97 + escolha)}: `);
+          elemento('span', null, bloco, motivo);
+        }
+        elemento('p', 'quiz__explicacao', resposta, q.explicacao);
+
+        if (q.ancora && q.revisar) {
+          const rever = elemento('a', 'quiz__rever', resposta, `Rever ${q.revisar}`);
+          rever.href = `#${q.ancora}`;
+        }
         atualizarPlacar();
       }
     });
@@ -557,6 +644,8 @@ function pintarPainel(chave) {
 
   const lista = elemento('ul', 'lista-impactos', painel);
   for (const i of r.impactos) elemento('li', null, lista, i);
+
+  marcarTermosDinamicos(painel);
 }
 
 function montarLegendaMapa() {
@@ -611,6 +700,15 @@ async function montarMapa() {
       'O mapa não pôde ser carregado. Os números por região continuam disponíveis nos botões e no gráfico abaixo.');
     aviso.style.color = 'var(--muted)';
   }
+
+  // escolher o estado seleciona a região no mapa e destaca a unidade
+  ligarOndeVoceMora((chaveRegiao, uf) => {
+    mapa?.selecionar(chaveRegiao);
+    definirBotoes(chaveRegiao);
+    for (const caminho of $$('.uf', hospedeiro)) {
+      caminho.dataset.escolhido = String(Boolean(uf) && caminho.dataset.uf === uf);
+    }
+  });
 }
 
 /* =========================================================================
@@ -630,6 +728,33 @@ function montarGraficos() {
  * Cenas 3D, carregadas sob demanda
  * ====================================================================== */
 
+/**
+ * Comparação lado a lado. Arrastar o controle mostra a transição, mas obriga
+ * a lembrar do estado anterior; aqui os dois extremos ficam na tela juntos.
+ * As duas cenas extras só são criadas na primeira vez que o painel abre.
+ */
+function ligarComparacao(criarPacifico) {
+  const botao = $('#abrir-comparacao');
+  const painel = $('#comparacao');
+  if (!botao || !painel) return;
+
+  let montado = false;
+  botao.addEventListener('click', () => {
+    const abrir = painel.hidden;
+    painel.hidden = !abrir;
+    botao.setAttribute('aria-expanded', String(abrir));
+    botao.textContent = abrir
+      ? 'Fechar a comparação'
+      : 'Comparar lado a lado: neutro × El Niño forte';
+
+    if (abrir && !montado) {
+      montado = true;
+      criarPacifico($('#palco-comparar-neutro'), { fase: 0 });
+      criarPacifico($('#palco-comparar-nino'), { fase: 1 });
+    }
+  });
+}
+
 async function montarCenas() {
   const { temWebGL, avisoSemWebGL } = await import('./scenes/runtime.js');
 
@@ -639,6 +764,9 @@ async function montarCenas() {
     for (const alvo of alvos) {
       avisoSemWebGL(alvo, 'Seu navegador não tem WebGL disponível. O texto, os gráficos e o mapa continuam funcionando.');
     }
+    // a comparação existe só como cena: sem WebGL, o controle não tem o que abrir
+    const comparar = $('.comparar');
+    if (comparar) comparar.hidden = true;
     return;
   }
 
@@ -663,6 +791,9 @@ async function montarCenas() {
     if (dica) dica.style.opacity = '0';
   }, { once: true });
 
+  // --- comparação lado a lado, montada só quando alguém pede ---
+  ligarComparacao(criarPacifico);
+
   // --- teleconexão até o Brasil ---
   const quente = token('--warm');
   const frio = token('--cool');
@@ -683,6 +814,8 @@ async function montarCenas() {
 
 function iniciar() {
   ligarNavegacao();
+  montarResumos();
+  montarMitos();
   montarIndicadores();
   montarEcossistemas();
   montarLinhaDoTempo();
@@ -694,8 +827,13 @@ function iniciar() {
   montarMapa();
   ligarSimulador();
   montarQuiz();
+  montarChecagens();
   montarOferta();
-  ligarEtapas();
+  montarEtapas();
+  montarFicha();
+  ligarSumario();
+  // por último: o glossário varre o texto que os passos anteriores criaram
+  ligarGlossario();
   ligarRevelacao();
   montarCenas().catch((e) => console.error('cenas 3D:', e));
 }

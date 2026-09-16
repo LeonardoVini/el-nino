@@ -111,7 +111,10 @@ function lerToken(nome) {
  * desenhista preencher, e redesenha sozinho quando a largura muda.
  */
 export function criarFigura(destino, opcoes) {
-  const { titulo, subtitulo, fonte, legenda = [], tabela, aspecto = 0.45, alturaMin = 260, alturaMax = 460 } = opcoes;
+  const {
+    titulo, subtitulo, comoLer, fonte, legenda = [], tabela,
+    aspecto = 0.45, alturaMin = 260, alturaMax = 460,
+  } = opcoes;
 
   const fig = html('figure', 'figura', destino);
   const cab = html('div', 'figura__cabecalho', fig);
@@ -120,6 +123,16 @@ export function criarFigura(destino, opcoes) {
   h.id = id;
 
   if (subtitulo) html('p', 'figura__sub', fig, subtitulo);
+
+  /**
+   * Um gráfico só é evidente para quem já sabe lê-lo. Esta linha diz, em uma
+   * frase, o que é cada marca e em que direção o olho deve correr.
+   */
+  if (comoLer) {
+    const guia = html('p', 'figura__como-ler', fig);
+    html('strong', null, guia, 'Como ler: ');
+    html('span', null, guia, comoLer);
+  }
 
   if (legenda.length > 1) {
     const leg = html('div', 'legenda', fig);
@@ -243,6 +256,10 @@ export function graficoONI(destino, dados, opcoes = {}) {
     subtitulo:
       opcoes.subtitulo ??
       'Anomalia de temperatura da superfície do mar na região Niño 3.4, trimestre dezembro–fevereiro. Acima de +0,5 °C é El Niño; abaixo de −0,5 °C, La Niña.',
+    comoLer:
+      opcoes.comoLer ??
+      'cada coluna é um ano. Para cima e em laranja, El Niño; para baixo e em azul, La Niña. ' +
+      'As duas linhas tracejadas são os limiares de ±0,5 °C a partir dos quais o evento é declarado.',
     fonte: opcoes.fonte ?? 'NOAA / Climate Prediction Center',
     legenda: [
       { rotulo: 'El Niño (oceano mais quente)', cor: lerToken('--warm') },
@@ -397,6 +414,11 @@ export function graficoEvolucao(destino, series, rotulosX, opcoes = {}) {
     subtitulo:
       opcoes.subtitulo ??
       'Os quatro eventos mais intensos já medidos, alinhados pelo ciclo: nascem no outono do Hemisfério Norte, atingem o pico entre novembro e janeiro e se desfazem no outono seguinte.',
+    comoLer:
+      opcoes.comoLer ??
+      'cada linha é um evento, alinhado pelo estágio do ciclo e não pelo calendário. ' +
+      'O eixo horizontal percorre os trimestres móveis, de abril do primeiro ano a julho do seguinte: ' +
+      'é isso que permite comparar o ritmo de eventos separados por décadas.',
     fonte: opcoes.fonte ?? 'NOAA / Climate Prediction Center',
     legenda: series.map((s, i) => ({ rotulo: s.rotulo, cor: cores[i], tipo: 'linha' })),
     tabela: {
@@ -535,6 +557,11 @@ export function graficoRegioes(destino, regioes, ordem, opcoes = {}) {
     subtitulo:
       opcoes.subtitulo ??
       'Desvio típico da chuva na estação mais sensível de cada região durante um El Niño forte. A barra mostra o valor central; a linha, a variação observada entre eventos.',
+    comoLer:
+      opcoes.comoLer ??
+      'cada barra é uma região. Para a esquerda, chuva abaixo da média; para a direita, acima. ' +
+      'A linha fina que atravessa a barra mostra a variação observada entre eventos: quanto mais ' +
+      'longa, menos confiável é o valor central.',
     fonte: opcoes.fonte ?? 'Composição a partir de INPE/CPTEC, INMET e IRI',
     legenda: [
       { rotulo: 'Chuva abaixo da média', cor: warm },
@@ -656,6 +683,10 @@ export function graficoRanking(destino, itens, opcoes = {}) {
   const ctx = criarFigura(destino, {
     titulo: opcoes.titulo ?? 'Os dez El Niños mais fortes desde 1950',
     subtitulo: opcoes.subtitulo ?? 'Pico do ONI em cada evento, em °C acima da média.',
+    comoLer:
+      opcoes.comoLer ??
+      'os eventos em ordem de intensidade, do mais forte no topo. O comprimento da barra é o ' +
+      'valor máximo que o ONI atingiu naquele evento.',
     fonte: opcoes.fonte ?? 'NOAA / Climate Prediction Center',
     tabela: {
       legenda: 'Pico do ONI por evento, em °C.',
@@ -724,6 +755,10 @@ export function graficoRioNegro(destino, dados, opcoes = {}) {
     subtitulo:
       opcoes.subtitulo ??
       'Nível mínimo do rio Negro atingido em anos marcantes. Quanto menor a barra, mais grave a seca. Os dois menores valores da série inteira são de 2023 e 2024.',
+    comoLer:
+      opcoes.comoLer ??
+      'cada barra é o nível mínimo que o rio atingiu naquele ano. Aqui a barra curta é a má ' +
+      'notícia: quanto menor, mais grave foi a seca.',
     fonte: opcoes.fonte ?? 'Porto de Manaus / SGB-CPRM',
     tabela: {
       legenda: 'Nível mínimo anual do rio Negro no porto de Manaus, em metros.',
@@ -830,6 +865,11 @@ export function graficoMatriz(destino, matriz, regioes, ordem, opcoes = {}) {
     subtitulo:
       opcoes.subtitulo ??
       'Síntese qualitativa do impacto por setor e região em um evento forte. O Sul é a única parte do país que colhe algum benefício, e ainda assim paga em enchentes.',
+    comoLer:
+      opcoes.comoLer ??
+      'leia uma linha de cada vez, da esquerda para a direita: é uma região atravessando todos os ' +
+      'setores. Quanto mais escura e mais laranja a célula, pior o impacto; o azul indica efeito ' +
+      'favorável e o cinza, ausência de sinal claro.',
     fonte: opcoes.fonte ?? 'Síntese a partir de Conab, ONS, Embrapa, Ministério da Saúde e Cemaden',
     tabela: {
       legenda: 'Escala de −3 (impacto severo) a +2 (efeito muito favorável).',
